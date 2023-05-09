@@ -4,7 +4,7 @@ WORKDIR /home/
 
 RUN git clone https://github.com/kurenai49/joonggoboat.git
 
-WORKDIR /home/agentSunbak/
+WORKDIR /home/joonggoboat/
 
 RUN pip install -r requirements.txt
 
