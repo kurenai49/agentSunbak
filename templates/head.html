@@ -1,0 +1,26 @@
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap" rel="stylesheet">
+
+    <!--  DEFAULT CSS LINK  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+
+    {# 한국선박중개소 link 이동 #}
+    <script>
+        function ship_detail_pop(shipNo) {
+            window.open('http://www.ksupk.or.kr/file/ship_view_pop.php?no=' + shipNo, 'win_ship_pop', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=auto,resizable=no,copyhistory=no,width=1224,height=704,left=10');
+            window.location.href = 'http://www.ksupk.or.kr/file/ship_sale_list5.php?cs_ancestor=3&cs_mkey=3';
+        }
+
+        function daehan_sunbak_openShipDetails(boardURL, detailURL) {
+            window.open(detailURL, '_blank', 'width=1200, height=700, scrollbars=yes, resizable=yes');
+            window.location.href = boardURL;
+        }
+    </script>
+</head>

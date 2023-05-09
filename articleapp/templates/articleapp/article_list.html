@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="get" class="search-form">
+        <select name="site_name">
+            <option value="">전체</option>
+            {% for site in site_names %}
+                <option value="{{ site }}" {% if selected_site_name == site %}selected{% endif %}>{{ site }}</option>
+            {% endfor %}
+        </select>
+        <select name="order">
+            <option value="update_desc" {% if order == 'update_desc' %}selected{% endif %}>최신순</option>
+            <option value="update_asc" {% if order == 'update_asc' %}selected{% endif %}>과거순</option>
+            <option value="price_desc" {% if order == 'price_desc' %}selected{% endif %}>높은가격순</option>
+            <option value="price_asc" {% if order == 'price_asc' %}selected{% endif %}>낮은가격순</option>
+        </select>
+        <input type="text" name="query" placeholder="Search" value="{{ request.GET.query }}">
+        <button type="submit">검색</button>
+    </form>
+
+
+    <div class="main_slide">
+        <ul>
+            {% for article in articles %}
+                <li>
+                    {% if article.siteName == '한국선박중개소' %}
+                        <a href="{{ article.detailURL }}" class="card-link">
+                    {% elif article.siteName == '도시선박' %}
+                        <a href="{{ article.detailURL }}" class="card-link">
+                    {% elif article.siteName == '대한선박중개' %}
+                        <a href="#" onclick="javascript:daehan_sunbak_openShipDetails('{{ article.boardURL }}','{{ article.detailURL }}')" class="card-link">
+                    {% endif %}
+                    <img src="{{ article.imgsrc }}" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
+                    <div class="txt_info">
+                        <p>{{ article.title }}</p>
+                        <span>{{ article.updated_at|date:"Y-m-d" }}</span>
+                        <h1>{{ article.price }}</h1>
+                        <b>{{ article.siteName }}</b>
+                    </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- pagination 추가 -->
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+        {% endif %}
+
+        {% for i in paginator.page_range %}
+            {% if i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
+                {% if page_obj.number == i %}
+                    <span class="current">
+                        {{ i }}
+                    </span>
+                {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+        {% endif %}
+
+    </span>
+    </div>
+
+
+
+
+{% endblock %}

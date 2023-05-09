@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Ship Details</title>
+    <script>
+        function openShipDetails(shipNo) {
+            window.open('http://www.ksupk.or.kr/file/ship_view_pop.php?no=' + shipNo, 'win_ship_pop', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=auto,resizable=no,copyhistory=no,width=1224,height=704,left=10');
+            window.location.href = 'http://www.ksupk.or.kr/file/ship_sale_list5.php?cs_ancestor=3&cs_mkey=3';
+        }
+    </script>
+</head>
+<body>
+    <a href="#" onclick="openShipDetails(5828)">자세히 보기</a>
+</body>
+</html>

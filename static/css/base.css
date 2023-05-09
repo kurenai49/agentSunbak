@@ -1,0 +1,406 @@
+.logo_font a {
+    font-family: 'East Sea Dokdo', cursive;
+    color: inherit; /* 상위 요소의 색상을 그대로 사용하도록 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+
+.logo_font a:hover {
+    text-decoration: none; /* 마우스 호버 시 밑줄 제거 */
+}
+
+.index-wrap {
+    margin: 0 auto;
+    padding: 100px 0 0;
+    text-align: center;
+}
+
+/* reset.css */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* reset.css end */
+
+.categories_link {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.categories_link li {
+    flex: 1;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    background: #fff;
+    border-radius: 10px;
+    margin: 15px;
+    padding: 15px 0;
+    transition: margin 0.1s ease-out;
+    box-sizing: border-box;
+    min-width: 150px;
+}
+
+.categories_link li p {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 6px;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.categories_link li span {
+    display: block;
+}
+
+.categories_link li:hover {
+    cursor: pointer;
+    margin-top: -5px;
+    box-shadow: 0 7px 14px #a2a6d166;
+}
+
+.categories_link a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease-in-out;
+}
+
+.categories_link a:hover {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+
+.categories_link li {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.categories_link li:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.main_slide {
+    width: 100%;
+    max-width: 830px; /* 이 값을 헤더의 max-width 값과 동일하게 설정해주세요. */
+    margin: 20px auto;
+}
+
+.main_slide ul {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.main_slide li {
+    flex: 1 1 30%;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px #0003;
+    overflow: hidden;
+}
+
+.main_slide li:hover {
+    cursor: pointer;
+    margin-top: -5px;
+    box-shadow: 0 7px 14px #a2a6d166;
+    transform: scale(1.05); /* 카드 확대 효과 추가 */
+}
+
+
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link:hover {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.main_slide li img {
+    width: 100%;
+}
+
+.main_slide li .txt_info {
+    padding: 20px 10px;
+}
+
+.main_slide li .txt_info p {
+    width: 100%;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.main_slide li .txt_info span {
+    width: 100%;
+    height: 32px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-break: keep-all;
+    color: #999;
+    margin: 10px auto;
+}
+
+.main_slide li .txt_info h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.main_slide li .txt_info b {
+    color: #999;
+    display: inline-block;
+    white-space: nowrap;
+    width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+    margin-top: 1rem;
+}
+
+
+@media only screen and (min-width: 600px) and (max-width: 899px) {
+    /* 모바일 가로, 타블렛 세로 */
+    .categories_link {
+        justify-content: center;
+    }
+
+    .categories_link li {
+        flex: 0 auto;
+        margin-bottom: 38px;
+        width: 20%;
+    }
+
+    .main_slide {
+        width: 90%;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 599px) {
+    /* 모바일 세로 */
+    .categories_link {
+        justify-content: center;
+    }
+
+    .categories_link li {
+        flex: 0 auto;
+        margin-bottom: 30px;
+        width: 40%;
+    }
+
+    .main_slide {
+        width: 90%;
+    }
+}
+
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.footer-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.footer-menu {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-menu span {
+    cursor: pointer;
+    color: #007BFF;
+}
+
+.footer-menu span:hover {
+    text-decoration: underline;
+}
+
+.footer-disclaimer {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    max-width: 830px; /* 메인 슬라이드의 max-width 값과 동일하게 설정 */
+    margin: 1rem auto; /* 중앙 정렬을 위한 마진 설정 */
+    padding: 0 1rem; /* 영역 양쪽에 여백 추가 */
+}
+
+.footer-copyright {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* 기존 CSS 코드 ... */
+
+
+@media screen and (max-width: 500px) {
+    html {
+        font-size: 13px;
+    }
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.prgmatic_header_nav {
+    margin: 0 0.5rem;
+}
+
+
+.pragmatic_header_navbar {
+    margin: 1rem 0;
+}
+
+
+/*이하 필터 디자인*/
+.search-form {
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    max-width: 830px; /* 메인 슬라이드의 max-width 값과 동일하게 설정 */
+    width: 100%;
+    margin: 1.5rem auto; /* 중앙 정렬을 위한 마진 설정 */
+}
+
+.search-form input,
+.search-form select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.search-form button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+/* New Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.step-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.step-links a {
+    padding: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #A463F2; /* 연한 보라색 */
+    color: white;
+    text-decoration: none;
+    border-radius: 50%;
+    font-size: 22px; /* 글씨 크기 설정 */
+}
+
+.step-links a:hover {
+    background-color: #7C2CB9; /* 더 진한 보라색 */
+}
+
+
+.current {
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 22px; /* 글씨 크기 설정 */
+}
+
+.step-links a, .current {
+    padding: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; /* 이 부분을 추가하여 동그라미 모양을 만듭니다. */
+}

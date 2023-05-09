@@ -1,0 +1,50 @@
+{% load static %}
+{#<div class="search-block-categories">#}
+{#    <a class="search-block-categories_link" href="{% url 'articleapp:fishing_vessel' %}">#}
+{#        <span class="search-block-categories_link-icon lazyloaded" style="background-image: url('{% static 'imgs/fishing_vessel.jpg' %}');"></span>#}
+{#        어선#}
+{#    </a>#}
+{#    <a class="search-block-categories_link" href="{% url 'articleapp:fishing_boat' %}">#}
+{#        <span class="search-block-categories_link-icon lazyloaded" style="background-image: url('{% static 'imgs/fishing_boat.jpg' %}');"></span>#}
+{#        낚시선#}
+{#    </a>#}
+{#    <a class="search-block-categories_link" href="{% url 'articleapp:leisure_boat' %}">#}
+{#        <span class="search-block-categories_link-icon lazyloaded" style="background-image: url('{% static 'imgs/leisure_boat.jpg' %}');"></span>#}
+{#        레저선박#}
+{#    </a>#}
+{#    <a class="search-block-categories_link" href="{% url 'articleapp:etc' %}">#}
+{#        <span class="search-block-categories_link-icon lazyloaded" style="background-image: url('{% static 'imgs/etc.jpg' %}');"></span>#}
+{#        선박기타#}
+{#    </a>#}
+{#</div>#}
+<div class="category_wrap">
+    <ul class="categories_link">
+        <a href="{% url 'articleapp:fishing_vessel' %}">
+            <li>
+                <p style="background-image: url('{% static 'imgs/fishing_vessel.jpg' %}');"></p>
+                <span>어선</span>
+            </li>
+        </a>
+        <span class="separator"></span>
+        <a href="{% url 'articleapp:fishing_boat' %}">
+            <li>
+                <p style="background-image: url('{% static 'imgs/fishing_boat.jpg' %}');"></p>
+                <span>낚시배</span>
+            </li>
+        </a>
+        <span class="separator"></span>
+        <a href="{% url 'articleapp:leisure_boat' %}">
+            <li>
+                <p style="background-image: url('{% static 'imgs/leisure_boat.jpg' %}');"></p>
+                <span>레저선</span>
+            </li>
+        </a>
+        <span class="separator"></span>
+        <a href="{% url 'articleapp:etc' %}">
+            <li>
+                <p style="background-image: url('{% static 'imgs/etc.jpg' %}');"></p>
+                <span>기타선박</span>
+            </li>
+        </a>
+    </ul>
+</div>
