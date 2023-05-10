@@ -14,7 +14,7 @@ class ArticleView(ListView):
 
         query = self.request.GET.get('query', '')
         site_name = self.request.GET.get('site_name', '')  # 이름 변경
-        order = self.request.GET.get('order', '')  # 'desc' 또는 'asc'
+        order = self.request.GET.get('order', 'update_desc')  # 'desc' 또는 'asc'
 
 
         filter_conditions = Q(boardType=boardType)

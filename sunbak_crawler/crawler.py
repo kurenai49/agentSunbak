@@ -17,9 +17,6 @@ from django.utils import timezone
 from sunbak_crawler.models import connectionTimeModel, sunbak_Crawl_DataModel
 
 
-# Create your views here.
-
-
 # URL + params = GET URL
 def create_get_url(base_url, params):
     from urllib.parse import urlencode
@@ -483,6 +480,8 @@ def crawl_joonggobae(boardType):
 #     return data
 
 def run_crawler():
+    # 크롤링할때마다 모든 데이터 삭제
+    sunbak_Crawl_DataModel.objects.all().delete()
     new_items = []
     for boardType in ('어선', '낚시배', '레저선박', '기타선박'):
         data = crawl_ksupk(boardType)

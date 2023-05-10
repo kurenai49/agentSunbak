@@ -150,6 +150,13 @@ table {
     transform: scale(1.05); /* 카드 확대 효과 추가 */
 }
 
+.main_slide img {
+    display: block;
+    background-color: #f0f0f0;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
 
 .card-link {
     display: block;
@@ -352,6 +359,7 @@ a:hover {
 .search-form button:hover {
     background-color: #0056b3;
 }
+
 /* New Pagination styles */
 .pagination {
     display: flex;
