@@ -69,6 +69,8 @@ def convert_price_to_int(price_str):
                 current_man_unit += int(current_value) * current_multiplier
                 current_value = ''
             elif part == '원':
+                if current_man_unit == 0:
+                    price_int += int(current_value)
                 break
             elif part == '억':
                 price_int += current_man_unit * 100000000 if current_man_unit != 0 else int(current_value) * 100000000

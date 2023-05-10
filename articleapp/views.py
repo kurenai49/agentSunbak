@@ -41,6 +41,10 @@ class ArticleView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['site_names'] = sunbak_Crawl_DataModel.objects.values_list('siteName', flat=True).distinct()
-        context['order'] = self.request.GET.get('order', '')  # 이 줄을 추가하세요
-        context['selected_site_name'] = self.request.GET.get('site_name', '')  # 이 줄을 수정하세요
+        context['order'] = self.request.GET.get('order', '')
+        context['selected_site_name'] = self.request.GET.get('site_name', '')
+
+        # 쿼리 파라미터를 포함한 페이지네이션 링크를 생성하기 위해 현재의 쿼리 파라미터를 context에 추가
+        context['query_params'] = self.request.GET.urlencode()
+
         return context

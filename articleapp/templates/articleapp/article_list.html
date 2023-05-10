@@ -44,29 +44,30 @@
     </div>
     <!-- pagination 추가 -->
     <div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
-        {% endif %}
-
-        {% for i in paginator.page_range %}
-            {% if i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
-                {% if page_obj.number == i %}
-                    <span class="current">
-                        {{ i }}
-                    </span>
-                {% else %}
-                    <a href="?page={{ i }}">{{ i }}</a>
-                {% endif %}
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?{{ query_params }}&page={{ page_obj.previous_page_number }}">&lt;</a>
             {% endif %}
-        {% endfor %}
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
-        {% endif %}
+            {% for i in paginator.page_range %}
+                {% if i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
+                    {% if page_obj.number == i %}
+                        <span class="current">
+                            {{ i }}
+                        </span>
+                    {% else %}
+                        <a href="?{{ query_params }}&page={{ i }}">{{ i }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
 
-    </span>
+            {% if page_obj.has_next %}
+                <a href="?{{ query_params }}&page={{ page_obj.next_page_number }}">&gt;</a>
+            {% endif %}
+
+        </span>
     </div>
+
 
 
 
