@@ -166,3 +166,4 @@ db.sqlite3
 __pycache__/
 agentSunbak/__pycache__/
 Dockerfile
+docker-compose.yml

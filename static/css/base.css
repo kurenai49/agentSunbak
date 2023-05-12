@@ -1,5 +1,5 @@
 .logo_font a {
-    font-family: 'East Sea Dokdo', cursive;
+    font-family: 'Jua', sans-serif;
     color: inherit; /* 상위 요소의 색상을 그대로 사용하도록 설정 */
     text-decoration: none; /* 밑줄 제거 */
 }
@@ -272,6 +272,10 @@ footer {
     margin-bottom: 1rem;
 }
 
+.footer-menu a {
+    text-decoration: none;
+}
+
 .footer-menu span {
     cursor: pointer;
     color: #007BFF;
@@ -280,6 +284,19 @@ footer {
 .footer-menu span:hover {
     text-decoration: underline;
 }
+
+.footer-email {
+    font-size: 0.8em;
+    color: #888; /* 이메일 텍스트 색상 */
+    margin-bottom: 1em; /* 다음 요소와의 거리 */
+    margin-top: 1rem;
+}
+
+.footer-email a {
+    text-decoration: none;
+    color: #888;
+}
+
 
 .footer-disclaimer {
     font-size: 0.8rem;
