@@ -12,6 +12,7 @@ class sunbak_Crawl_DataModel(models.Model):
     price_int = models.PositiveIntegerField(default=0)
     regNumber = models.PositiveIntegerField(default=0)
     boardURL = models.CharField(max_length=255)
+    thumb_image = models.ImageField(upload_to='thumbs/', null=True)
 
     class Meta:
         unique_together = ('siteName', 'regNumber')

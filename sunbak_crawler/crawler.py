@@ -4,18 +4,42 @@ https://daehansunbak.com/
 http://www.xn--299ak40atvj.com/
 http://www.goldenship.co.kr/
 '''
+import os
 import re
+import shutil
+import uuid
 from time import sleep
+from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.base import ContentFile
 # Create your views here.
 from django.utils import timezone
 
-from sunbak_crawler.models import connectionTimeModel, sunbak_Crawl_DataModel
+from .models import sunbak_Crawl_DataModel, connectionTimeModel
 
+
+# Create your views here.
+
+
+def download_and_save_image(model_instance, url):
+    try:
+        response = requests.get(url, verify=False)
+        response.raise_for_status()  # 에러 발생 시 예외를 발생시킵니다.
+
+        # UUID를 사용하여 임의의 파일 이름을 생성합니다.
+        # 이미지 URL의 확장자를 유지하기 위해 os.path.splitext를 사용합니다.
+        ext = urlparse(url).path.split('.')[-1]
+        filename = '{}.{}'.format(uuid.uuid4(), ext)
+
+        model_instance.thumb_image.save(filename, ContentFile(response.content), save=False)
+        return True
+    except:
+        return False
 
 # URL + params = GET URL
 def create_get_url(base_url, params):
@@ -162,7 +186,11 @@ def crawl_ksupk(boardType):
                 if price == '협의원':
                     price = '협의'
                 boardURL = create_get_url(req_url, params)
-                data.append((imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL))
+                try:
+                    image_file = requests.get(imgsrc).content
+                except:
+                    pass
+                data.append((imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, image_file))
 
             nextPage = soup.select('span.choi_button3')[-1]['value']
             if int(page) >= int(nextPage):
@@ -412,78 +440,14 @@ def crawl_joonggobae(boardType):
     return data
 
 
-# def crawl_goldenship(boardType):
-#     siteName = '골든선박'
-#     headers = {
-#         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-#         'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
-#         'Cache-Control': 'no-cache',
-#         'Connection': 'keep-alive',
-#         'Pragma': 'no-cache',
-#         'Referer': 'http://www.goldenship.co.kr/',
-#         'Upgrade-Insecure-Requests': '1',
-#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-#     }
-#
-#     params = {
-#         'cate': '1',
-#         'PHPSESSID': '081c95148aa056bc1f6a14ac7935a5d7',
-#     }
-#
-#     response = requests.get(
-#         'http://www.goldenship.co.kr/product/index.php',
-#         params=params,
-#         headers=headers,
-#         verify=False,
-#     )
-#
-#
-#     encoding = response.encoding
-#
-#     # 인코딩이 정의되지 않은 경우, 일반적으로 사용되는 utf-8로 설정
-#     if encoding != 'euc-kr':
-#         encoding = 'euc-kr'
-#     soup = BeautifulSoup(response.content.decode(encoding), 'html.parser')
-#
-#     # imgsrc = models.URLField(max_length=200)
-#     # title = models.CharField(max_length=100)
-#     # price = models.CharField(max_length=15)
-#     # boardType = models.CharField(max_length=10)
-#     # detailURL = models.CharField(max_length=255)
-#     # updated_at = models.DateField(null=True)
-#     # siteName = models.CharField(max_length=12, null=True)
-#     # price_int = models.IntegerField(default=0)
-#
-#     trs = soup.select('tr[bgcolor]')
-#
-#     data = []
-#     for tr in trs:
-#         title = tr.select('td')[3].text.strip()
-#         imgsrc = tr.select('td')[2].img['src']
-#         if 'http://www.goldenship.co.kr' not in imgsrc:
-#             imgsrc = 'http://www.goldenship.co.kr'+imgsrc
-#         price = tr.select('td')[6].text.strip().replace('계약가능', '')
-#         if not price: # 매매완료의 경우 price == ''
-#             continue
-#         uploaded_date = tr.select('td')[8].text.strip()
-#         uploaded_date = parse(uploaded_date).strftime('%Y-%m-%d')
-#         try:
-#             detailURL = tr['onclick'].replace("location.href='",'').replace("';",'')
-#             if 'http://www.xn--299ak40atvj.com/board_ship/' not in detailURL:
-#                 detailURL = 'http://www.xn--299ak40atvj.com/board_ship/' + detailURL
-#         except:
-#             detailURL = ''
-#         price_int = extract_price_and_convert_to_int(price)
-#         try:
-#             price_int = int(price_int)
-#         except:
-#             price_int = 0
-#         data.append((imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL))
-#     return data
 
 def run_crawler():
     # 크롤링할때마다 모든 데이터 삭제
     sunbak_Crawl_DataModel.objects.all().delete()
+    media_dir = os.path.join(settings.MEDIA_ROOT, 'thumbs')
+    if os.path.exists(media_dir):
+        shutil.rmtree(media_dir)
+    os.makedirs(media_dir, exist_ok=True)
     new_items = []
     for boardType in ('어선', '낚시배', '레저선박', '기타선박'):
         data = crawl_ksupk(boardType)
@@ -504,6 +468,8 @@ def run_crawler():
                 }
             )
             if created:
+                if download_and_save_image(obj, item[0]):  # 이미지 다운로드 및 저장
+                    obj.save()  # 이미지가 성공적으로 저장되면 변경 사항을 커밋합니다.
                 new_items.append(obj)
 
         try:
@@ -535,6 +501,8 @@ def run_crawler():
                 }
             )
             if created:
+                if download_and_save_image(obj, item[0]):  # 이미지 다운로드 및 저장
+                    obj.save()  # 이미지가 성공적으로 저장되면 변경 사항을 커밋합니다.
                 new_items.append(obj)
 
         try:
@@ -566,6 +534,8 @@ def run_crawler():
                 }
             )
             if created:
+                if download_and_save_image(obj, item[0]):  # 이미지 다운로드 및 저장
+                    obj.save()  # 이미지가 성공적으로 저장되면 변경 사항을 커밋합니다.
                 new_items.append(obj)
 
         try:
