@@ -33,7 +33,8 @@ SECRET_KEY = env('SECRET_KEY')
 # DEBUG = env('DEBUG')
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['141.164.34.35', 'xn--vf4b37lzfd.com', 'www.xn--vf4b37lzfd.com']
 
 # Application definition
 

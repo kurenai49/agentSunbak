@@ -341,17 +341,18 @@ a:hover {
 }
 
 
+/* Other styles are omitted for brevity... */
+
 /*이하 필터 디자인*/
 .search-form {
-
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: stretch;
     gap: 1rem;
     margin-bottom: 2rem;
-    max-width: 830px; /* 메인 슬라이드의 max-width 값과 동일하게 설정 */
-    width: 100%;
-    margin: 1.5rem auto; /* 중앙 정렬을 위한 마진 설정 */
+    max-width: 830px;
+    width: 90%;
+    margin: 1.5rem auto;
 }
 
 .search-form input,
@@ -371,11 +372,37 @@ a:hover {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%; /* set the width to 100% so that it matches in width with other elements on smaller screens */
 }
 
 .search-form button:hover {
     background-color: #0056b3;
 }
+
+/* Update this media query as follows */
+@media (min-width: 600px) {
+    .search-form {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around; /* change this to flex-start so elements start at the left */
+    }
+
+    .search-form input,
+    .search-form select,
+    .search-form button {
+        flex: 2.5; /* make each form element take up equal amount of space */
+        max-width: none;
+        margin-right: 0; /* add some margin to the right of each element */
+    }
+
+    .search-form button {
+        flex: 1; /* decrease the size ratio of the button element */
+        margin-right: 0; /* remove the right margin from the button */
+    }
+}
+
+/* Other styles are omitted for brevity... */
+
 
 /* New Pagination styles */
 .pagination {
