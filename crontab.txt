@@ -1,2 +1,0 @@
-0 3 * * * python /home/agentSunbak/run_crawler.py >> /var/log/cron.log 2>&1
-# 파일 끝에는 항상 빈 줄을 추가해야 합니다.
