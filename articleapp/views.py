@@ -13,10 +13,22 @@ class ArticleView(ListView):
         boardType = self.kwargs['boardType']
 
         query = self.request.GET.get('query', '')
-        site_name = self.request.GET.get('site_name', '')  # 이름 변경
+        # site_name = self.request.GET.get('site_name', '')  # 이름 변경
         order = self.request.GET.get('order', 'update_desc')  # 'desc' 또는 'asc'
-        tons_weight = self.request.GET.get('tons_weight', '')
-        price = self.request.GET.get('price', '')
+
+        min_price = self.request.GET.get('min_price', 0)
+        max_price = self.request.GET.get('max_price', None)
+        min_tons = self.request.GET.get('min_tons', 0)  # Minimum tons filter
+        max_tons = self.request.GET.get('max_tons', None)  # Maximum tons filter
+
+        if min_price == '':
+            min_price = 0
+        if max_price == '':
+            max_price = 100
+        if min_tons == '':
+            min_tons = 0
+        if max_tons == '':
+            max_tons = 1000
 
 
         filter_conditions = Q(boardType=boardType)
@@ -24,16 +36,22 @@ class ArticleView(ListView):
         if query:
             filter_conditions &= Q(title__icontains=query)
 
-        if site_name:
-            filter_conditions &= Q(siteName=site_name)
+        # if site_name:
+        #     filter_conditions &= Q(siteName=site_name)
 
-        if tons_weight:
-            weight_from, weight_to = map(int, tons_weight.split(';'))
-            filter_conditions &= Q(tons__gte=weight_from, tons__lte=weight_to)
+        # Price filters
+        if min_price is not None:
+            filter_conditions &= Q(price_int__gte=int(min_price)*100000000)
 
-        if price:
-            price_from, price_to = map(int, price.split(';'))
-            filter_conditions &= Q(price_int__gte=price_from, price_int__lte=price_to)
+        if max_price is not None:
+            filter_conditions &= Q(price_int__lte=int(max_price)*100000000)
+
+        # Tons filters
+        if min_tons is not None:
+            filter_conditions &= Q(tons__gte=min_tons)
+
+        if max_tons is not None:
+            filter_conditions &= Q(tons__lte=max_tons)
 
         articles = sunbak_Crawl_DataModel.objects.filter(filter_conditions)
 

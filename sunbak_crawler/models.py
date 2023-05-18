@@ -13,7 +13,7 @@ class sunbak_Crawl_DataModel(models.Model):
     regNumber = models.PositiveIntegerField(default=0)
     boardURL = models.CharField(max_length=255)
     thumb_image = models.ImageField(upload_to='thumbs/', null=True)
-    tons = models.FloatField(default=0)
+    tons = models.FloatField()
 
     class Meta:
         unique_together = ('siteName', 'regNumber')

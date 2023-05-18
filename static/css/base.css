@@ -384,14 +384,9 @@ a:hover {
     width: 90%;
     margin: 0 auto;
 }
-#price {
-    margin-bottom: 150px;
+#price #tons_weight {
+    margin: 150px;
 }
-
-#tons_weight {
-    margin-top: 150px;
-}
-
 
 /* Update this media query as follows */
 @media (min-width: 600px) {
