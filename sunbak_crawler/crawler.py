@@ -19,12 +19,49 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 # Create your views here.
 from django.utils import timezone
-
 from .models import sunbak_Crawl_DataModel, connectionTimeModel
+import logging
+import os, shutil
 
+loggerName = 'sunbakCrawler'
+save_logfileName = "logging.log"
+purefilename = save_logfileName.split('.')[0]
 
-# Create your views here.
+logger = logging.getLogger(loggerName)
+logger.setLevel(logging.INFO)
 
+formatter = logging.Formatter(fmt='[%(asctime)s] - %(name)s - %(levelname)s: %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
+# formatter = logging.Formatter('[%(asctime)s] - %(name)s - %(levelname)s: %(message)s')
+
+stream_hander = logging.StreamHandler()
+stream_hander.setFormatter(formatter)
+logger.addHandler(stream_hander)
+
+file_handler = logging.FileHandler(save_logfileName, encoding='utf-8')  # 사용환경별 코드
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+if os.path.getsize(f"{purefilename}.log") > 500000:
+    try:
+        shutil.copy(f"{purefilename}.log",f"{purefilename}1.log")
+        shutil.copy(f"{purefilename}.log1",f"{purefilename}2.log")
+        shutil.copy(f"{purefilename}.log2",f"{purefilename}3.log")
+        shutil.copy(f"{purefilename}.log3",f"{purefilename}4.log")
+        os.remove(f"{purefilename}.log")
+    except:
+        pass
+
+# logger.info('')
+# logger.warning('')
+# logger.error('')
+# logger.critical('')
+# logger.fatal('')
+def tons_from_title(string):
+    match = re.findall(r"(\b\d+\.\d+|\b\d+(?=\s?(t|톤|ton)))", string)
+    if match:
+        return match[0][0]
+    else:
+        return None
 
 def download_and_save_image(model_instance, url):
     try:
@@ -114,12 +151,14 @@ def convert_price_to_int(price_str):
 
 # boardType'어선'
 def crawl_ksupk(boardType):
+    logger.info(f'한국선박중개소 크롤링을 시작합니다 boardType={boardType}')
     data = []
     siteName = '한국선박중개소'
-    def crawling():
+    def crawling(params, headers):
         page = 0
         for _ in range(30): # 최대 30페이지까지 확인, 그전에 페이지가 끝나면 break
             page += 1
+            logger.info(f'한국선박중개소 - boardType={boardType}, {page}페이지 크롤링')
             if page == 1:
                 response = requests.get(
                     req_url,
@@ -190,9 +229,54 @@ def crawl_ksupk(boardType):
                     image_file = requests.get(imgsrc).content
                 except:
                     pass
-                data.append((imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, image_file))
 
-            nextPage = soup.select('span.choi_button3')[-1]['value']
+                # tons 수집을 위한 detailURL 확인
+                tons = tons_from_title(title)
+                try:
+                    tons = float(tons)
+                except:
+                    params = {
+                        'no': regNumber,
+                    }
+                    try:
+                        headers = {
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                            'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Pragma': 'no-cache',
+                            'Referer': 'http://www.ksupk.or.kr/file/ship_sale_list2.php?cs_ancestor=1&cs_mkey=1',
+                            'Upgrade-Insecure-Requests': '1',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                        }
+                        response = requests.get(
+                            'http://www.ksupk.or.kr/file/ship_view_pop.php',
+                            params=params,
+                            headers=headers,
+                            verify=False,
+                        )
+                        try:
+                            soupArticle = BeautifulSoup(response.content.decode('euc-kr'), 'html.parser')
+                        except:
+                            soupArticle = BeautifulSoup(response.content.decode('cp949'), 'html.parser')
+                        for elem in soupArticle.select('td'):
+                            if '톤수' in elem.text:
+                                tons = tons_from_title(elem.nextSibling.nextSibling.text)
+                                if tons:
+                                    tons = float(tons)
+                                break
+                    except:
+                        tons = 0
+                if tons == None:
+                    tons = 0
+                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
+
+            try:
+                nextPage = soup.select('span.choi_button3')[-1]['value']
+            except:
+                print(soup)
+                logger.warning(f'다음 페이지({nextPage}) 없음')
+                break
             if int(page) >= int(nextPage):
                 break
     headers = {
@@ -212,8 +296,7 @@ def crawl_ksupk(boardType):
         }
         req_url = 'http://www.ksupk.or.kr/file/ship_sale_list2.php'
         req_url_add = 'http://www.ksupk.or.kr/file/ship_sale_list_add2.php'
-
-        crawling()
+        crawling(params, headers)
     elif boardType == '낚시배':
         params = {
             'cs_ancestor': '2',
@@ -221,7 +304,7 @@ def crawl_ksupk(boardType):
         }
         req_url = 'http://www.ksupk.or.kr/file/ship_sale_list1.php'
         req_url_add = 'http://www.ksupk.or.kr/file/ship_sale_list_add1.php'
-        crawling()
+        crawling(params, headers)
     elif boardType == '레저선박':
         params = {
             'cs_ancestor': '9',
@@ -229,7 +312,7 @@ def crawl_ksupk(boardType):
         }
         req_url = 'http://www.ksupk.or.kr/file/ship_sale_list6.php'
         req_url_add = 'http://www.ksupk.or.kr/file/ship_sale_list_add6.php'
-        crawling()
+        crawling(params, headers)
     elif boardType == '기타선박':
         params = {
             'cs_ancestor': '9',
@@ -238,7 +321,7 @@ def crawl_ksupk(boardType):
 
         req_url = 'http://www.ksupk.or.kr/file/ship_sale_list3.php' # 기타선박
         req_url_add = 'http://www.ksupk.or.kr/file/ship_sale_list_add3.php'
-        crawling()
+        crawling(params, headers)
 
         params = {
             'cs_ancestor': '3',
@@ -246,14 +329,14 @@ def crawl_ksupk(boardType):
         }
         req_url = 'http://www.ksupk.or.kr/file/ship_sale_list5.php' # 선외기
         req_url_add = 'http://www.ksupk.or.kr/file/ship_sale_list_add5.php'
-        crawling()
+        crawling(params, headers)
     return data
 
 # 대한선박중개
 def crawl_daehansunbak(boardType):
     siteName = '대한선박중개'
     data = []
-    def crawling():
+    def crawling(params, headers):
         page = 0
         for _ in range(30):
             page += 1
@@ -294,7 +377,52 @@ def crawl_daehansunbak(boardType):
                 except:
                     price_int = 0
                 boardURL = create_get_url(req_url, params)
-                data.append((imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL))
+
+                tons = tons_from_title(title)
+                try:
+                    tons = float(tons)
+                except:
+                    params = {
+                        't_db': 'f_sunbak_sale',
+                        'no': regNumber,
+                    }
+                    try:
+                        headers = {
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                            'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Pragma': 'no-cache',
+                            'Referer': 'https://daehansunbak.com/index.html',
+                            'Sec-Fetch-Dest': 'document',
+                            'Sec-Fetch-Mode': 'navigate',
+                            'Sec-Fetch-Site': 'same-origin',
+                            'Sec-Fetch-User': '?1',
+                            'Upgrade-Insecure-Requests': '1',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                            'sec-ch-ua': '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
+                            'sec-ch-ua-mobile': '?0',
+                            'sec-ch-ua-platform': '"Windows"',
+                        }
+                        response = requests.get(
+                            'https://daehansunbak.com/fboard/f_sunbak_sale/f_open_content.html',
+                            params=params,
+                            headers=headers,
+                            verify=False
+                        )
+                        soupArticle = BeautifulSoup(response.text, 'html.parser')
+                        for elem in soupArticle.select('td.th2'):
+                            if '톤' in elem.text:
+                                tons = tons_from_title(elem.nextSibling.nextSibling.text)
+                                if tons:
+                                    tons = float(tons)
+                                break
+                    except:
+                        tons = 0
+                if tons == None:
+                    tons = 0
+                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
+
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
@@ -316,31 +444,32 @@ def crawl_daehansunbak(boardType):
         params = {
             'p_no': '5', # 근해어선
         }
-        crawling()
+        crawling(params, headers)
         params = {
             'p_no': '1', # 어선
         }
-        crawling()
+        crawling(params, headers)
     elif boardType == '낚시선':
         params = {
             'p_no': '2', # 낚시선
         }
-        crawling()
+        crawling(params, headers)
     elif boardType == '레저선박':
         params = {
             'p_no': '3', # 레저선
         }
-        crawling()
+        crawling(params, headers)
     elif boardType == '기타선박':
         params = {
             'p_no': '4', # 기타선박
         }
-        crawling()
+        crawling(params, headers)
+
     return data
 
 #도시선박 (중고배.com)
 def crawl_joonggobae(boardType):
-    def crawling():
+    def crawling(params, headers):
         page = 0
         for _ in range(30):
             page += 1
@@ -398,7 +527,44 @@ def crawl_joonggobae(boardType):
                 except:
                     price_int = 0
                 boardURL = create_get_url(req_url, params)
-                data.append((imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL))
+
+                headers = {
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                    'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                    'Pragma': 'no-cache',
+                    'Referer': 'http://www.xn--299ak40atvj.com/board_ship/sell_list.asp?search_txt=&search_key=&s_board_cate=A&s_board_area=&page=5&nowblock=0',
+                    'Upgrade-Insecure-Requests': '1',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                }
+                tons = tons_from_title(title)
+                try:
+                    tons = float(tons)
+                except:
+                    try:
+                        response = requests.get(
+                            detailURL,
+                            params=params,
+                            headers=headers,
+                            verify=False
+                        )
+                        try:
+                            soupArticle = BeautifulSoup(response.content.decode('euc-kr'), 'html.parser')
+                        except:
+                            soupArticle = BeautifulSoup(response.content.decode('cp949'), 'html.parser')
+                        for elem in soupArticle.select('th'):
+                            if '톤' in elem.text:
+                                tons = tons_from_title(elem.nextSibling.nextSibling.text)
+                                if tons:
+                                    tons = float(tons)
+                                break
+                    except:
+                        tons = 0
+                if tons == None:
+                    tons = 0
+                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
+
 
     siteName = '도시선박'
     data = []
@@ -417,26 +583,27 @@ def crawl_joonggobae(boardType):
         params = {
             's_board_cate': 'A',
         }
-        crawling()
+        crawling(params, headers)
         params = {
             's_board_cate': 'B',
         }
-        crawling()
+        crawling(params, headers)
     elif boardType == '낚시배':
         params = {
             's_board_cate': 'C',
         }
-        crawling()
+        crawling(params, headers)
     elif boardType == '레저선박':
         params = {
             's_board_cate': 'D',
         }
-        crawling()
+        crawling(params, headers)
     elif boardType == '기타선박':
         params = {
             's_board_cate': 'E',
         }
-        crawling()
+        crawling(params, headers)
+
     return data
 
 
@@ -465,6 +632,7 @@ def run_crawler():
                     'price_int': item[6],
                     'detailURL': item[7],
                     'boardURL': item[9],
+                    'tons': item[10],
                 }
             )
             if created:
@@ -498,6 +666,7 @@ def run_crawler():
                     'price_int': item[6],
                     'detailURL': item[7],
                     'boardURL': item[9],
+                    'tons': item[10],
                 }
             )
             if created:
@@ -531,6 +700,7 @@ def run_crawler():
                     'price_int': item[6],
                     'detailURL': item[7],
                     'boardURL': item[9],
+                    'tons': item[10],
                 }
             )
             if created:
@@ -548,3 +718,4 @@ def run_crawler():
                 action_time=timezone.now(),
                 boardType=boardType,
             )
+

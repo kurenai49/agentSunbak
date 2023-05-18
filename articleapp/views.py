@@ -15,6 +15,8 @@ class ArticleView(ListView):
         query = self.request.GET.get('query', '')
         site_name = self.request.GET.get('site_name', '')  # 이름 변경
         order = self.request.GET.get('order', 'update_desc')  # 'desc' 또는 'asc'
+        tons_weight = self.request.GET.get('tons_weight', '')
+        price = self.request.GET.get('price', '')
 
 
         filter_conditions = Q(boardType=boardType)
@@ -24,6 +26,14 @@ class ArticleView(ListView):
 
         if site_name:
             filter_conditions &= Q(siteName=site_name)
+
+        if tons_weight:
+            weight_from, weight_to = map(int, tons_weight.split(';'))
+            filter_conditions &= Q(tons__gte=weight_from, tons__lte=weight_to)
+
+        if price:
+            price_from, price_to = map(int, price.split(';'))
+            filter_conditions &= Q(price_int__gte=price_from, price_int__lte=price_to)
 
         articles = sunbak_Crawl_DataModel.objects.filter(filter_conditions)
 
