@@ -388,6 +388,8 @@ a:hover {
     margin: 150px;
 }
 
+
+
 /* Update this media query as follows */
 @media (min-width: 600px) {
     .search-form {
