@@ -335,11 +335,13 @@ def crawl_ksupk(boardType):
 # 대한선박중개
 def crawl_daehansunbak(boardType):
     siteName = '대한선박중개'
+    logger.info(f'{siteName} 크롤링을 시작합니다 boardType={boardType}')
     data = []
     def crawling(params, headers):
         page = 0
         for _ in range(30):
             page += 1
+            logger.info(f'{siteName} - boardType={boardType}, {page}페이지 크롤링')
             req_url = 'https://daehansunbak.com/index.html'
             if page == 1:
                 response = requests.get(req_url, params=params, headers=headers, verify=False)
@@ -469,10 +471,13 @@ def crawl_daehansunbak(boardType):
 
 #도시선박 (중고배.com)
 def crawl_joonggobae(boardType):
+    siteName = '도시선박'
+    logger.info(f'{siteName} 크롤링을 시작합니다 boardType={boardType}')
     def crawling(params, headers):
         page = 0
         for _ in range(30):
             page += 1
+            logger.info(f'{siteName} - boardType={boardType}, {page}페이지 크롤링')
             req_url = 'http://www.xn--299ak40atvj.com/board_ship/sell_list.asp'
             if page != 1:
                 params['page']=page
@@ -566,7 +571,6 @@ def crawl_joonggobae(boardType):
                 data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
 
 
-    siteName = '도시선박'
     data = []
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
