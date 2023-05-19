@@ -31,13 +31,15 @@ SECRET_KEY = env('SECRET_KEY')
 
 # False if not in os.environ because of casting above
 # DEBUG = env('DEBUG')
-DEBUG = False
-# DEBUG = True
+# DEBUG = False
+DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['141.164.34.35', 'xn--299ay81a07iqvj.com', 'www.xn--299ay81a07iqvj.com']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['141.164.34.35', 'xn--299ay81a07iqvj.com', 'www.xn--299ay81a07iqvj.com']
+
+
+
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
