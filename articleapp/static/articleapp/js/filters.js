@@ -10,15 +10,15 @@ $(document).ready(function () {
     }
 
     var min_price = getParameterByName('min_price') || 0;
-    var max_price = getParameterByName('max_price') || 100;
+    var max_price = getParameterByName('max_price') || 70;
     var min_tons = getParameterByName('min_tons') || 0;
-    var max_tons = getParameterByName('max_tons') || 1000;
+    var max_tons = getParameterByName('max_tons') || 50;
 
     $("#price").ionRangeSlider({
         type: "double",
         grid: true,
         min: 0,
-        max: 100,
+        max: 70,
         from: min_price,
         to: max_price,
         postfix: " 억원",
@@ -36,7 +36,7 @@ $(document).ready(function () {
         type: "double",
         grid: true,
         min: 0,
-        max: 1000,
+        max: 50,
         from: min_tons,
         to: max_tons,
         postfix: " 톤",
