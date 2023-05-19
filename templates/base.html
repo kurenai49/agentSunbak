@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 
 <html lang="en">
-{% include 'head.html' %}
+<head>
+    {% include 'head.html' %}
+</head>
 <body>
-
 <div class="index-wrap" style="text-align: center;">
-
-        <h1 class="logo_font" style="font-size: 5rem;"><a href="{% url 'base' %}">중고보트.com</a></h1>
-
+    <h1 class="logo_font" style="font-size: 5rem;"><a href="{% url 'base' %}">중고보트.com</a></h1>
 </div>
 {% include 'header.html' %}
 {% block content %}
