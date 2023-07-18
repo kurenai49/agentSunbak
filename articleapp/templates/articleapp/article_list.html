@@ -49,7 +49,7 @@
                         <a href="#" onclick="javascript:daehan_sunbak_openShipDetails('{{ article.boardURL }}','{{ article.detailURL }}')" class="card-link">
                     {% endif %}
                     {% if article.thumb_image %}
-                        <img src="{{ article.thumb_image.url }}" alt="{{ article.title }}" style="object-fit: cover; height: 200px;" onerror="this.onerror=null; this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';">
+                        <img src="{{ article.thumb_image.url }}" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
                     {% else %}
                         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
                     {% endif %}
