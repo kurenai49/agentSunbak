@@ -1,0 +1,4 @@
+docker stop e663a3dfc7d5 # nginx docker 일단 중단
+certbot certificates # 만기일자 확인
+certbot renew # 자동갱신 명령어, host 에서 실행
+docker start e663a3dfc7d5 # nginx docker 다시 시작

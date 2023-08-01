@@ -1,0 +1,22 @@
+일일이 push 하고 올려보기가 지쳐서 그냥 파일을 로컬에서 수정하고
+수정한 파일을 파일질라로 호스트에 올리고 호스트에서 도커컨테이너 내부로 복사하는 방법을 이용
+
+ex)
+
+templates/head.html 파일을 수정하였다면
+
+1. filezila 로 head.html 을 /home/ 에 업로드
+2. ubuntu 호스트에서 명령어 입력
+docker cp /home/head.html agentsunbak_django:/home/agentSunbak/templates/head.html
+끝 웹상에서 접속해서 Ctrl + F5 해서 적용이 되었는지 확인하기
+
+
+docker cp /home/uploads/settings.py agentsunbak_django:/home/agentSunbak/agentSunbak/settings.py
+docker cp /home/uploads/models.py agentsunbak_django:/home/agentSunbak/sunbak_crawler/models.py
+docker cp /home/uploads/crawler.py agentsunbak_django:/home/agentSunbak/agentSunbak/crawler.py
+docker cp /home/uploads/fishing_boat.jpg agentsunbak_django:/home/agentSunbak/staticfiles/imgs/fishing_boat.jpg
+
+docker cp /home/uploads/base.css agentsunbak_django:/home/agentSunbak/staticfiles/css/base.css
+docker cp /home/uploads/article_list.html agentsunbak_django:/home/agentSunbak/articleapp/templates/articleapp/article_list.html
+docker cp /home/uploads/views.py agentsunbak_django:/home/agentSunbak/articleapp/views.py
+docker cp /home/uploads/filters.js agentsunbak_django:/home/agentSunbak/articleapp/static/articleapp/js/filters.js

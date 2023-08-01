@@ -2,6 +2,17 @@ function submitForm() {
     document.getElementById('search-form').submit();
 }
 
+document.querySelector('.searchbtn').addEventListener('click', function(e) {
+    e.preventDefault(); // 기본 폼 제출 방지
+
+    let url = new URL(window.location.href);
+
+    url.searchParams.set('min_modelYear', document.querySelector('#min_modelYear').value);
+    url.searchParams.set('max_modelYear', document.querySelector('#max_modelYear').value);
+
+    window.location.href = url.href;
+});
+
 $(document).ready(function () {
 
     function getParameterByName(name) {

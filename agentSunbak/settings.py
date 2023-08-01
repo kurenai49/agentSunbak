@@ -13,6 +13,7 @@ from datetime import timedelta
 from pathlib import Path
 import environ
 import os
+import platform
 
 env = environ.Env(
     # set casting, default value
@@ -30,11 +31,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # False if not in os.environ because of casting above
-DEBUG = False
-# DEBUG = True
+DEBUG = True if platform.platform().startswith("Windows") else False
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['141.164.34.35', 'xn--299ay81a07iqvj.com', 'www.xn--299ay81a07iqvj.com']
+ALLOWED_HOSTS = ['*'] if platform.platform().startswith("Windows") else ['141.164.34.35', 'xn--299ay81a07iqvj.com', 'www.xn--299ay81a07iqvj.com']
 
 # Application definition
 INSTALLED_APPS = [

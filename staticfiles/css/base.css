@@ -388,6 +388,50 @@ a:hover {
     margin: 150px;
 }
 
+
+.filter-input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    margin-right: 0; /* 우측 마진 추가 */
+    width: 12%; /* 너비 조정 */
+}
+
+.searchbtn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.year-filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    max-width: 830px;
+    width: 90%;
+    margin: 1.5rem auto;
+}
+.year-label {
+    font-size: 16px; /* 라벨의 글자 크기 조정 */
+    margin-right: 10px; /* 오른쪽 여백 추가 */
+}
+
+.year-range-symbol {
+    margin: 0 0px; /* 양쪽 여백 추가 */
+}
+
+.searchbtn {
+    /* 버튼에 대한 추가 스타일링 */
+}
+
 /* Update this media query as follows */
 @media (min-width: 600px) {
     .search-form {

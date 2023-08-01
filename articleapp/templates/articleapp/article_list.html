@@ -22,17 +22,27 @@
             <option value="price_asc" {% if order == 'price_asc' %}selected{% endif %}>낮은가격순</option>
         </select>
 
+        <select name="region" onchange="submitForm()">
+            <option value="">지역 전체</option>
+            {% for region in regions %}
+                <option value="{{ region }}" {% if selected_region == region %}selected{% endif %}>{{ region }}</option>
+            {% endfor %}
+        </select>
+
         <input type="text" name="query" placeholder="검색어를 입력하세요" value="{{ request.GET.query }}">
-
-        <input type="hidden" name="min_price" value="{{ request.GET.min_price }}"/>
-        <input type="hidden" name="max_price" value="{{ request.GET.max_price }}"/>
-        <input type="hidden" name="min_tons" value="{{ request.GET.min_tons }}"/>
-        <input type="hidden" name="max_tons" value="{{ request.GET.max_tons }}"/>
-
 
         <button type="submit">검색</button>
     </form>
+    <div class="year-filter">
+        <label for="min_modelYear" class="year-label">모델 연식 지정</label>
+        <input type="number" name="min_modelYear" id="min_modelYear" value="{{ request.GET.min_modelYear }}" class="filter-input" placeholder="2016">
+        <span class="year-range-symbol">~</span>
+        <input type="number" name="max_modelYear" id="max_modelYear" value="{{ request.GET.max_modelYear }}" class="filter-input" placeholder="2022">
+        <button class="searchbtn">🔍</button>
+
+    </div>
     <div class="filter_slide">
+
         <input type="text" id="price" name="price" value="{{ request.GET.price }}"/>
         <input type="text" id="tons_weight" name="tons_weight" value="{{ request.GET.tons_weight }}"/>
     </div>

@@ -2,6 +2,17 @@ function submitForm() {
     document.getElementById('search-form').submit();
 }
 
+document.querySelector('.searchbtn').addEventListener('click', function(e) {
+    e.preventDefault(); // 기본 폼 제출 방지
+
+    let url = new URL(window.location.href);
+
+    url.searchParams.set('min_modelYear', document.querySelector('#min_modelYear').value);
+    url.searchParams.set('max_modelYear', document.querySelector('#max_modelYear').value);
+
+    window.location.href = url.href;
+});
+
 $(document).ready(function () {
 
     function getParameterByName(name) {
@@ -10,15 +21,15 @@ $(document).ready(function () {
     }
 
     var min_price = getParameterByName('min_price') || 0;
-    var max_price = getParameterByName('max_price') || 100;
+    var max_price = getParameterByName('max_price') || 70;
     var min_tons = getParameterByName('min_tons') || 0;
-    var max_tons = getParameterByName('max_tons') || 1000;
+    var max_tons = getParameterByName('max_tons') || 50;
 
     $("#price").ionRangeSlider({
         type: "double",
         grid: true,
         min: 0,
-        max: 100,
+        max: 70,
         from: min_price,
         to: max_price,
         postfix: " 억원",
@@ -36,7 +47,7 @@ $(document).ready(function () {
         type: "double",
         grid: true,
         min: 0,
-        max: 1000,
+        max: 50,
         from: min_tons,
         to: max_tons,
         postfix: " 톤",

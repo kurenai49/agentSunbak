@@ -61,7 +61,7 @@ def tons_from_title(string):
     if match:
         return match[0][0]
     else:
-        return None
+        return 0
 
 def download_and_save_image(model_instance, url):
     try:
@@ -231,50 +231,71 @@ def crawl_ksupk(boardType):
                     pass
 
                 # tons 수집을 위한 detailURL 확인
-                tons = tons_from_title(title)
+                params = {
+                    'no': regNumber,
+                }
                 try:
-                    tons = float(tons)
-                except:
-                    params = {
-                        'no': regNumber,
+                    headers = {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                        'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
+                        'Cache-Control': 'no-cache',
+                        'Connection': 'keep-alive',
+                        'Pragma': 'no-cache',
+                        'Referer': 'http://www.ksupk.or.kr/file/ship_sale_list2.php?cs_ancestor=1&cs_mkey=1',
+                        'Upgrade-Insecure-Requests': '1',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
                     }
+                    response = requests.get(
+                        'http://www.ksupk.or.kr/file/ship_view_pop.php',
+                        params=params,
+                        headers=headers,
+                        verify=False,
+                    )
                     try:
-                        headers = {
-                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                            'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
-                            'Cache-Control': 'no-cache',
-                            'Connection': 'keep-alive',
-                            'Pragma': 'no-cache',
-                            'Referer': 'http://www.ksupk.or.kr/file/ship_sale_list2.php?cs_ancestor=1&cs_mkey=1',
-                            'Upgrade-Insecure-Requests': '1',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-                        }
-                        response = requests.get(
-                            'http://www.ksupk.or.kr/file/ship_view_pop.php',
-                            params=params,
-                            headers=headers,
-                            verify=False,
-                        )
-                        try:
-                            soupArticle = BeautifulSoup(response.content.decode('euc-kr'), 'html.parser')
-                        except:
-                            soupArticle = BeautifulSoup(response.content.decode('cp949'), 'html.parser')
-                        for elem in soupArticle.select('td'):
-                            if '톤수' in elem.text:
-                                tons = tons_from_title(elem.nextSibling.nextSibling.text)
-                                if tons:
-                                    tons = float(tons)
-                                break
+                        soupArticle = BeautifulSoup(response.content.decode('euc-kr'), 'html.parser')
                     except:
+                        soupArticle = BeautifulSoup(response.content.decode('cp949'), 'html.parser')
+                    # tons
+                    for elem in soupArticle.select('td'):
+                        if '톤수' in elem.text:
+                            tons = tons_from_title(elem.nextSibling.nextSibling.text)
+                            if tons:
+                                tons = float(tons)
+                            break
+                    else:
                         tons = 0
-                if tons == None:
+                    # 모델연식
+                    for elem in soupArticle.select('td'):
+                        if '진수년월일' in elem.text:
+                            try:
+                                modelYear = elem.nextSibling.nextSibling.text.split('년')[0].strip()
+                                modelYear = int(modelYear)
+                            except:
+                                modelYear = None
+                            break
+                    else:
+                        modelYear = None
+
+                    # 판매소재지
+                    for elem in soupArticle.select('td'):
+                        if '판매정박지' in elem.text:
+                            try:
+                                salesLocation = elem.nextSibling.nextSibling.text.strip()
+                            except:
+                                salesLocation = ""
+                            break
+                    else:
+                        salesLocation = ""
+
+                except:
                     tons = 0
-                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
+                    modelYear = None
+                    salesLocation = ""
+                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons, modelYear, salesLocation])
 
             try:
                 nextPage = soup.select('span.choi_button3')[-1]['value']
             except:
-                print(soup)
                 logger.warning(f'다음 페이지({nextPage}) 없음')
                 break
             if int(page) >= int(nextPage):
@@ -351,7 +372,10 @@ def crawl_daehansunbak(boardType):
             sleep(1)
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            trs = soup.select_one('tr[align="center"]').parent.select('tr')[1:]
+            try:
+                trs = soup.select_one('tr[align="center"]').parent.select('tr')[1:]
+            except AttributeError:
+                break
             if not trs:
                 break
             for tr in trs:
@@ -380,50 +404,53 @@ def crawl_daehansunbak(boardType):
                     price_int = 0
                 boardURL = create_get_url(req_url, params)
 
-                tons = tons_from_title(title)
+                params = {
+                    't_db': 'f_sunbak_sale',
+                    'no': regNumber,
+                }
                 try:
-                    tons = float(tons)
-                except:
-                    params = {
-                        't_db': 'f_sunbak_sale',
-                        'no': regNumber,
+                    headers = {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                        'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
+                        'Cache-Control': 'no-cache',
+                        'Connection': 'keep-alive',
+                        'Pragma': 'no-cache',
+                        'Referer': 'https://daehansunbak.com/index.html',
+                        'Sec-Fetch-Dest': 'document',
+                        'Sec-Fetch-Mode': 'navigate',
+                        'Sec-Fetch-Site': 'same-origin',
+                        'Sec-Fetch-User': '?1',
+                        'Upgrade-Insecure-Requests': '1',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+                        'sec-ch-ua': '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
+                        'sec-ch-ua-mobile': '?0',
+                        'sec-ch-ua-platform': '"Windows"',
                     }
-                    try:
-                        headers = {
-                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                            'Accept-Language': 'ko,en-US;q=0.9,en;q=0.8,ru;q=0.7,zh-CN;q=0.6,zh;q=0.5',
-                            'Cache-Control': 'no-cache',
-                            'Connection': 'keep-alive',
-                            'Pragma': 'no-cache',
-                            'Referer': 'https://daehansunbak.com/index.html',
-                            'Sec-Fetch-Dest': 'document',
-                            'Sec-Fetch-Mode': 'navigate',
-                            'Sec-Fetch-Site': 'same-origin',
-                            'Sec-Fetch-User': '?1',
-                            'Upgrade-Insecure-Requests': '1',
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-                            'sec-ch-ua': '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
-                            'sec-ch-ua-mobile': '?0',
-                            'sec-ch-ua-platform': '"Windows"',
-                        }
-                        response = requests.get(
-                            'https://daehansunbak.com/fboard/f_sunbak_sale/f_open_content.html',
-                            params=params,
-                            headers=headers,
-                            verify=False
-                        )
-                        soupArticle = BeautifulSoup(response.text, 'html.parser')
-                        for elem in soupArticle.select('td.th2'):
-                            if '톤' in elem.text:
-                                tons = tons_from_title(elem.nextSibling.nextSibling.text)
-                                if tons:
-                                    tons = float(tons)
-                                break
-                    except:
+                    response = requests.get(
+                        'https://daehansunbak.com/fboard/f_sunbak_sale/f_open_content.html',
+                        params=params,
+                        headers=headers,
+                        verify=False
+                    )
+                    soupArticle = BeautifulSoup(response.text, 'html.parser')
+                    for elem in soupArticle.select('td.th2'):
+                        if '톤' in elem.text:
+                            tons = tons_from_title(elem.nextSibling.nextSibling.text)
+                            if tons:
+                                tons = float(tons)
+                            break
+                    else:
                         tons = 0
-                if tons == None:
+                    for elem in soupArticle.select('td.th2'):
+                        if '소재지역' in elem.text:
+                            salesLocation = elem.nextSibling.nextSibling.text.strip()
+                            break
+                    else:
+                        salesLocation = ""
+                except:
                     tons = 0
-                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
+                    salesLocation = ""
+                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons, modelYear, salesLocation])
 
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -543,32 +570,47 @@ def crawl_joonggobae(boardType):
                     'Upgrade-Insecure-Requests': '1',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
                 }
-                tons = tons_from_title(title)
                 try:
-                    tons = float(tons)
-                except:
+                    response = requests.get(
+                        detailURL,
+                        params=params,
+                        headers=headers,
+                        verify=False
+                    )
                     try:
-                        response = requests.get(
-                            detailURL,
-                            params=params,
-                            headers=headers,
-                            verify=False
-                        )
-                        try:
-                            soupArticle = BeautifulSoup(response.content.decode('euc-kr'), 'html.parser')
-                        except:
-                            soupArticle = BeautifulSoup(response.content.decode('cp949'), 'html.parser')
-                        for elem in soupArticle.select('th'):
-                            if '톤' in elem.text:
-                                tons = tons_from_title(elem.nextSibling.nextSibling.text)
-                                if tons:
-                                    tons = float(tons)
-                                break
+                        soupArticle = BeautifulSoup(response.content.decode('euc-kr'), 'html.parser')
                     except:
-                        tons = 0
-                if tons == None:
+                        soupArticle = BeautifulSoup(response.content.decode('cp949'), 'html.parser')
+                    for elem in soupArticle.select('th'):
+                        if '톤' in elem.text:
+                            tons = tons_from_title(elem.nextSibling.nextSibling.text)
+                            if tons:
+                                tons = float(tons)
+                            break
+                    for elem in soupArticle.select('th'):
+                        if '진수년월일' in elem.text:
+                            try:
+                                modelYear = elem.nextSibling.nextSibling.text.split('년')[0].strip()
+                                modelYear = int(modelYear)
+                            except:
+                                modelYear = None
+                            break
+                    else:
+                        modelYear = None
+                    for elem in soupArticle.select('th'):
+                        if '소재지역' in elem.text:
+                            try:
+                                salesLocation = elem.nextSibling.nextSibling.text.strip()
+                            except:
+                                salesLocation = ""
+                            break
+                    else:
+                        salesLocation = ""
+                except:
                     tons = 0
-                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons])
+                    modelYear = None
+                    salesLocation = ""
+                data.append([imgsrc, title, price, boardType, uploaded_date, siteName, price_int, detailURL, regNumber, boardURL, tons, modelYear, salesLocation])
 
 
     data = []
@@ -637,6 +679,8 @@ def run_crawler():
                     'detailURL': item[7],
                     'boardURL': item[9],
                     'tons': item[10],
+                    'modelYear': item[11],
+                    'salesLocation': item[12],
                 }
             )
             if created:
@@ -671,6 +715,8 @@ def run_crawler():
                     'detailURL': item[7],
                     'boardURL': item[9],
                     'tons': item[10],
+                    'modelYear': item[11],
+                    'salesLocation': item[12],
                 }
             )
             if created:
@@ -705,6 +751,8 @@ def run_crawler():
                     'detailURL': item[7],
                     'boardURL': item[9],
                     'tons': item[10],
+                    'modelYear': item[11],
+                    'salesLocation': item[12],
                 }
             )
             if created:

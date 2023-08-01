@@ -1,6 +1,7 @@
 from django.views.generic import ListView
 from sunbak_crawler.models import sunbak_Crawl_DataModel
 from django.db.models import Q
+from datetime import datetime
 # Create your views here.
 
 class ArticleView(ListView):
@@ -53,6 +54,24 @@ class ArticleView(ListView):
         if max_tons is not None:
             filter_conditions &= Q(tons__lte=max_tons)
 
+        # 지역 필터링 로직
+        region = self.request.GET.get('region', '')
+
+        filter_conditions = Q(boardType=boardType)
+
+        # 지역 필터 추가
+        if region:
+            filter_conditions &= Q(salesLocation=region)
+
+        min_modelYear = self.request.GET.get('min_modelYear', None)
+        max_modelYear = self.request.GET.get('max_modelYear', None)
+
+        if min_modelYear:
+            filter_conditions &= Q(modelYear__gte=min_modelYear)
+
+        if max_modelYear:
+            filter_conditions &= Q(modelYear__lte=max_modelYear)
+
         articles = sunbak_Crawl_DataModel.objects.filter(filter_conditions)
 
         if order == 'update_desc':
@@ -71,6 +90,13 @@ class ArticleView(ListView):
         context['site_names'] = sunbak_Crawl_DataModel.objects.values_list('siteName', flat=True).distinct()
         context['order'] = self.request.GET.get('order', '')
         context['selected_site_name'] = self.request.GET.get('site_name', '')
+        context['selected_region'] = self.request.GET.get('region', '')  # 선택된 지역 추가
+        context['regions'] = sunbak_Crawl_DataModel.objects.values_list('salesLocation', flat=True).distinct().exclude(salesLocation='')
+
+        context['modelYears'] = range(1980, datetime.now().year + 1)
+        context['selected_min_modelYear'] = self.request.GET.get('min_modelYear', '')
+        context['selected_max_modelYear'] = self.request.GET.get('max_modelYear', '')
+
 
         # 쿼리 파라미터를 포함한 페이지네이션 링크를 생성하기 위해 현재의 쿼리 파라미터를 context에 추가
         context['query_params'] = self.request.GET.urlencode()
