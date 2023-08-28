@@ -8,44 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <form id="search-form" method="get" class="search-form flex-container">
-        {#        <select name="site_name" onchange="submitForm()">#}
-        {#            <option value="">전체</option>#}
-        {#            {% for site in site_names %}#}
-        {#                <option value="{{ site }}" {% if selected_site_name == site %}selected{% endif %}>{{ site }}</option>#}
-        {#            {% endfor %}#}
-        {#        </select>#}
-        <select name="order" onchange="submitForm()">
-            <option value="update_desc" {% if order == 'update_desc' %}selected{% endif %}>최신순</option>
-            <option value="update_asc" {% if order == 'update_asc' %}selected{% endif %}>과거순</option>
-            <option value="price_desc" {% if order == 'price_desc' %}selected{% endif %}>높은가격순</option>
-            <option value="price_asc" {% if order == 'price_asc' %}selected{% endif %}>낮은가격순</option>
-        </select>
-
-        <select name="region" onchange="submitForm()">
-            <option value="">지역 전체</option>
-            {% for region in regions %}
-                <option value="{{ region }}" {% if selected_region == region %}selected{% endif %}>{{ region }}</option>
-            {% endfor %}
-        </select>
-
-        <input type="text" name="query" placeholder="검색어를 입력하세요" value="{{ request.GET.query }}">
-
-        <button type="submit">검색</button>
-    </form>
-    <div class="year-filter">
-        <label for="min_modelYear" class="year-label">모델 연식 지정</label>
-        <input type="number" name="min_modelYear" id="min_modelYear" value="{{ request.GET.min_modelYear }}" class="filter-input" placeholder="2016">
-        <span class="year-range-symbol">~</span>
-        <input type="number" name="max_modelYear" id="max_modelYear" value="{{ request.GET.max_modelYear }}" class="filter-input" placeholder="2022">
-        <button class="searchbtn">🔍</button>
-
-    </div>
-    <div class="filter_slide">
-
-        <input type="text" id="price" name="price" value="{{ request.GET.price }}"/>
-        <input type="text" id="tons_weight" name="tons_weight" value="{{ request.GET.tons_weight }}"/>
-    </div>
+    {% include 'articleapp/article_filters.html' %}
     <script src="{% static 'articleapp/js/filters.js' %}"></script>
     <div class="main_slide">
         <ul>

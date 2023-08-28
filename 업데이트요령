@@ -11,12 +11,16 @@ docker cp /home/head.html agentsunbak_django:/home/agentSunbak/templates/head.ht
 끝 웹상에서 접속해서 Ctrl + F5 해서 적용이 되었는지 확인하기
 
 
-docker cp /home/uploads/settings.py agentsunbak_django:/home/agentSunbak/agentSunbak/settings.py
+docker cp /home/uploads/base.html agentsunbak_django:/home/agentSunbak/templates/base.html
+docker cp /home/uploads/footer.html agentsunbak_django:/home/agentSunbak/templates/footer.html
 docker cp /home/uploads/models.py agentsunbak_django:/home/agentSunbak/sunbak_crawler/models.py
 docker cp /home/uploads/crawler.py agentsunbak_django:/home/agentSunbak/agentSunbak/crawler.py
-docker cp /home/uploads/fishing_boat.jpg agentsunbak_django:/home/agentSunbak/staticfiles/imgs/fishing_boat.jpg
+docker cp /home/uploads/mainlogo.png agentsunbak_django:/home/agentSunbak/staticfiles/imgs/mainlogo.png
 
 docker cp /home/uploads/base.css agentsunbak_django:/home/agentSunbak/staticfiles/css/base.css
+docker cp /home/uploads/base.css agentsunbak_django:/home/agentSunbak/static/css/base.css
 docker cp /home/uploads/article_list.html agentsunbak_django:/home/agentSunbak/articleapp/templates/articleapp/article_list.html
 docker cp /home/uploads/views.py agentsunbak_django:/home/agentSunbak/articleapp/views.py
-docker cp /home/uploads/filters.js agentsunbak_django:/home/agentSunbak/articleapp/static/articleapp/js/filters.js
+docker cp /home/uploads/crawler.py agentsunbak_django:/home/agentSunbak/sunbak_crawler/crawler.py
+
+docker cp agentsunbak_django:/home/agentSunbak/db.sqlite3 /home/

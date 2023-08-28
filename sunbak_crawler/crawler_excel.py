@@ -4,24 +4,16 @@ https://daehansunbak.com/
 http://www.xn--299ak40atvj.com/
 http://www.goldenship.co.kr/
 '''
+# Create your views here.
+import logging
 import os
 import re
 import shutil
-import uuid
 from time import sleep
-from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.base import ContentFile
-# Create your views here.
-from django.utils import timezone
-from .models import sunbak_Crawl_DataModel, connectionTimeModel
-import logging
-import os, shutil
 
 loggerName = 'sunbakCrawler'
 save_logfileName = "logging.log"
@@ -63,20 +55,6 @@ def tons_from_title(string):
     else:
         return 0
 
-def download_and_save_image(model_instance, url):
-    try:
-        response = requests.get(url, verify=False)
-        response.raise_for_status()  # 에러 발생 시 예외를 발생시킵니다.
-
-        # UUID를 사용하여 임의의 파일 이름을 생성합니다.
-        # 이미지 URL의 확장자를 유지하기 위해 os.path.splitext를 사용합니다.
-        ext = urlparse(url).path.split('.')[-1]
-        filename = '{}.{}'.format(uuid.uuid4(), ext)
-
-        model_instance.thumb_image.save(filename, ContentFile(response.content), save=False)
-        return True
-    except:
-        return False
 
 # URL + params = GET URL
 def create_get_url(base_url, params):
@@ -657,120 +635,57 @@ def crawl_joonggobae(boardType):
 
 
 
-def run_crawler():
+if __name__ == '__main__':
     # 크롤링할때마다 모든 데이터 삭제
-    sunbak_Crawl_DataModel.objects.all().delete()
-    media_dir = os.path.join(settings.MEDIA_ROOT, 'thumbs')
-    if os.path.exists(media_dir):
-        shutil.rmtree(media_dir)
-    os.makedirs(media_dir, exist_ok=True)
-    new_items = []
+    import openpyxl
+    wb = openpyxl.Workbook()
+    ws = wb.active
     for boardType in ('어선', '낚시배', '레저선박', '기타선박'):
         data = crawl_ksupk(boardType)
         # 데이터 저장
         for item in data:
-            obj, created = sunbak_Crawl_DataModel.objects.update_or_create(
-                siteName=item[5],
-                regNumber=item[8],
-                defaults={
-                    'imgsrc': item[0],
-                    'title': item[1],
-                    'price': item[2],
-                    'boardType': item[3],
-                    'updated_at': item[4],
-                    'price_int': item[6],
-                    'detailURL': item[7],
-                    'boardURL': item[9],
-                    'tons': item[10],
-                    'modelYear': item[11],
-                    'salesLocation': item[12],
-                }
-            )
-            if created:
-                if download_and_save_image(obj, item[0]):  # 이미지 다운로드 및 저장
-                    obj.save()  # 이미지가 성공적으로 저장되면 변경 사항을 커밋합니다.
-                new_items.append(obj)
+            ws.append(item)
 
-        try:
-            obj = connectionTimeModel.objects.get(boardType=boardType)
-            obj.action_time = timezone.now()
-            obj.boardType = boardType
-            obj.save()
-        except ObjectDoesNotExist:
-            connectionTimeModel.objects.get_or_create(
-                action_time=timezone.now(),
-                boardType=boardType,
-            )
     for boardType in ('어선', '낚시배', '레저선박', '기타선박'):
         data = crawl_daehansunbak(boardType)
         # 데이터 저장
         for item in data:
-            obj, created = sunbak_Crawl_DataModel.objects.update_or_create(
-                siteName=item[5],
-                regNumber=item[8],
-                defaults={
-                    'imgsrc': item[0],
-                    'title': item[1],
-                    'price': item[2],
-                    'boardType': item[3],
-                    'updated_at': item[4],
-                    'price_int': item[6],
-                    'detailURL': item[7],
-                    'boardURL': item[9],
-                    'tons': item[10],
-                    'modelYear': item[11],
-                    'salesLocation': item[12],
-                }
-            )
-            if created:
-                if download_and_save_image(obj, item[0]):  # 이미지 다운로드 및 저장
-                    obj.save()  # 이미지가 성공적으로 저장되면 변경 사항을 커밋합니다.
-                new_items.append(obj)
-
-        try:
-            obj = connectionTimeModel.objects.get(boardType=boardType)
-            obj.action_time = timezone.now()
-            obj.boardType = boardType
-            obj.save()
-        except ObjectDoesNotExist:
-            connectionTimeModel.objects.get_or_create(
-                action_time=timezone.now(),
-                boardType=boardType,
-            )
+            ws.append(item)
     for boardType in ('어선', '낚시배', '레저선박', '기타선박'):
         data = crawl_joonggobae(boardType)
         # 데이터 저장
         for item in data:
-            obj, created = sunbak_Crawl_DataModel.objects.update_or_create(
-                siteName=item[5],
-                regNumber=item[8],
-                defaults={
-                    'imgsrc': item[0],
-                    'title': item[1],
-                    'price': item[2],
-                    'boardType': item[3],
-                    'updated_at': item[4],
-                    'price_int': item[6],
-                    'detailURL': item[7],
-                    'boardURL': item[9],
-                    'tons': item[10],
-                    'modelYear': item[11],
-                    'salesLocation': item[12],
-                }
-            )
-            if created:
-                if download_and_save_image(obj, item[0]):  # 이미지 다운로드 및 저장
-                    obj.save()  # 이미지가 성공적으로 저장되면 변경 사항을 커밋합니다.
-                new_items.append(obj)
+            ws.append(item)
+    wb.save('sunbak.xlsx')
+    wb.close()
 
-        try:
-            obj = connectionTimeModel.objects.get(boardType=boardType)
-            obj.action_time = timezone.now()
-            obj.boardType = boardType
-            obj.save()
-        except ObjectDoesNotExist:
-            connectionTimeModel.objects.get_or_create(
-                action_time=timezone.now(),
-                boardType=boardType,
-            )
+
+import re, openpyxl
+
+wb = openpyxl.load_workbook('sunbak.xlsx')
+ws = wb.active
+
+worddict = {}
+for cellB in ws['B']:
+    if cellB.value == None:
+        continue
+    words = re.split(r'[ /]', cellB.value)
+    for word in words:
+        if worddict.get(word):
+            worddict[word] += 1
+        else:
+            worddict[word] = 1
+
+
+sorted_keys = sorted(worddict, key=lambda x: worddict[x], reverse=True)
+
+
+
+# 정렬된 key와 value 값 프린트
+for key in sorted_keys:
+    # if worddict[key] < 20:
+    #     continue
+    print(key, worddict[key])
+    with open('works.txt', 'a', encoding='utf-8') as f:
+        f.write(f'{key} : {worddict[key]}\n')
 

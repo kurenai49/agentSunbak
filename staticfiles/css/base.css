@@ -349,7 +349,6 @@ a:hover {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
-    margin-bottom: 2rem;
     max-width: 830px;
     width: 90%;
     margin: 1.5rem auto;

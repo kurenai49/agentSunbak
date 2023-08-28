@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>중고보트.com - 지역선택</title>
+
+
+    <!-- CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'articleapp/css/xeicon.css' %}">
+    <link rel="stylesheet" href="{% static 'articleapp/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'articleapp/css/map.css' %}">
+
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+            rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div class="contents map_wrap">
+        <div class="map_inner">
+            <div class="left_box">
+                <div class="title">
+                    <p class="tit">
+                        지역 선택
+                    </p>
+                    <p class="desc mb-0">
+                        지역을 선택해주세요.
+                    </p>
+                </div>
+                <form method="GET" action="/" class="region_form">
+                    <div class="region_select">
+                        {% for region in regions %}
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="region_radio" id="region{{ forloop.counter }}">
+                            <label class="form-check-label" for="region{{ forloop.counter }}">
+                                {{ region }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+            <div class="right_box">
+                <img src="{% static 'articleapp/map_img.png' %}" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JS -->
+<script src="./js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+</script>
+<script src="./js/jquery-3.4.1.min.js"></script>
+<script src="./js/common.js"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const regionRadios = document.querySelectorAll('input[name="region_radio"]');
+        regionRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.checked) {
+                    let regionName = this.nextElementSibling.textContent.trim();
+                    window.location.href = `/sunbaks/?region=${regionName}`;
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+
+</html>

@@ -1,3 +1,8 @@
+window.onload = function() {
+    const currentYear = new Date().getFullYear();
+    document.getElementById("min_modelYear").placeholder = 2000;
+    document.getElementById("max_modelYear").placeholder = currentYear;
+}
 function submitForm() {
     document.getElementById('search-form').submit();
 }
@@ -9,6 +14,7 @@ document.querySelector('.searchbtn').addEventListener('click', function(e) {
 
     url.searchParams.set('min_modelYear', document.querySelector('#min_modelYear').value);
     url.searchParams.set('max_modelYear', document.querySelector('#max_modelYear').value);
+    url.searchParams.set('query', document.querySelector('input[name="query"]').value);
 
     window.location.href = url.href;
 });

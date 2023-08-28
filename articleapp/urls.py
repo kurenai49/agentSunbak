@@ -1,10 +1,12 @@
 from django.urls import path
 
-from articleapp.views import ArticleView
+from articleapp.views import ArticleView, RegionSelectView
 
 app_name = 'articleapp'
 
 urlpatterns = [
+
+    path('', ArticleView.as_view(), name='articles'),
     path('fishing_vessel/', ArticleView.as_view(), {'boardType':'어선'}, name='fishing_vessel'),
     path('fishing_boat/', ArticleView.as_view(), {'boardType':'낚시배'}, name='fishing_boat'),
     path('leisure_boat/', ArticleView.as_view(), {'boardType':'레저선박'}, name='leisure_boat'),

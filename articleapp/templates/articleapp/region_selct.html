@@ -1,0 +1,31 @@
+<div class="container">
+    <h1>Select Region</h1>
+
+    <!-- Region Dropdown Selection -->
+    <div class="region-selection">
+        <label for="regionDropdown">Choose a region:</label>
+        <select id="regionDropdown" onchange="navigateToRegion()">
+            <option value="">--Select Region--</option>
+            {% for region in regions %}
+                <option value="{{ region }}">{{ region }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Display Info or Links based on the selected region -->
+    <div class="region-info">
+        <!-- This can be populated dynamically based on the selected region, perhaps using JavaScript or another method. -->
+    </div>
+
+</div>
+
+<script>
+    function navigateToRegion() {
+        const dropdown = document.getElementById('regionDropdown');
+        const selectedRegion = dropdown.value;
+        // Assuming you have a URL pattern where region selection leads to a specific region page
+        if (selectedRegion) {
+            window.location.href = `/path-to-your-region-specific-page/${selectedRegion}/`;
+        }
+    }
+</script>

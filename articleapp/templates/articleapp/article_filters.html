@@ -1,0 +1,89 @@
+{% load static %}
+<div class="container">
+    {#    최상단광고판#}
+    <div class="index-wrap" style="text-align: center;">
+        <a href="https://kawasakikorea.com/ULTRA310LX">
+            <img src="{% static 'imgs/mainlogo.png' %}" alt="" class="main-image">
+        </a>
+    </div>
+    <div class="category_wrap">
+        <ul class="categories_link">
+            <li data-category="어선" onclick="navigateToCategory(this)">
+                <p style="background-image: url('{% static 'imgs/fishing_vessel.jpg' %}');"></p>
+                <span>어선</span>
+            </li>
+            {#            <span class="separator"></span>#}
+            <li data-category="낚시배" onclick="navigateToCategory(this)">
+                <p style="background-image: url('{% static 'imgs/fishing_boat.jpg' %}');"></p>
+                <span>낚시배</span>
+            </li>
+            {#            <span class="separator"></span>#}
+            <li data-category="레저선박" onclick="navigateToCategory(this)">
+                <p style="background-image: url('{% static 'imgs/leisure_boat.jpg' %}');"></p>
+                <span>레저선</span>
+            </li>
+            {#            <span class="separator"></span>#}
+            <li data-category="기타선박" onclick="navigateToCategory(this)">
+                <p style="background-image: url('{% static 'imgs/etc.jpg' %}');"></p>
+                <span>기타선박</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<form id="search-form" method="get" class="search-form">
+    <div class="selects">
+        <select name="order" onchange="submitForm()">
+            <option value="update_desc" {% if order == 'update_desc' %}selected{% endif %}>최신순</option>
+            <option value="update_asc" {% if order == 'update_asc' %}selected{% endif %}>과거순</option>
+            <option value="price_desc" {% if order == 'price_desc' %}selected{% endif %}>높은가격순</option>
+            <option value="price_asc" {% if order == 'price_asc' %}selected{% endif %}>낮은가격순</option>
+        </select>
+
+        <select name="price_range" onchange="submitForm()">
+            <option value="">가격 전체</option>
+            <option value="below_100" {% if selected_price == 'below_100' %}selected{% endif %}>1억 미만</option>
+            <option value="100_to_300" {% if selected_price == '100_to_300' %}selected{% endif %}>1억 이상 ~ 3억 미만</option>
+            <option value="300_to_1000" {% if selected_price == '300_to_1000' %}selected{% endif %}>3억 이상 ~ 10억 미만</option>
+            <option value="above_1000" {% if selected_price == 'above_1000' %}selected{% endif %}>10억 이상</option>
+        </select>
+
+        <select name="tons_range" onchange="submitForm()">
+            <option value="">톤수 전체</option>
+            <option value="below_3t" {% if selected_tons == 'below_3t' %}selected{% endif %}>3톤 미만</option>
+            <option value="3t_to_5t" {% if selected_tons == '3t_to_5t' %}selected{% endif %}>3톤 이상 ~ 5톤 미만</option>
+            <option value="5t_to_8t" {% if selected_tons == '5t_to_8t' %}selected{% endif %}>5톤 이상 ~ 8톤 미만</option>
+            <option value="8t_to_10t" {% if selected_tons == '8t_to_10t' %}selected{% endif %}>8톤 이상 ~ 10톤 미만</option>
+            <option value="above_10t" {% if selected_tons == 'above_10t' %}selected{% endif %}>10톤 이상</option>
+        </select>
+    </div>
+    <div class="year-filter">
+        <label for="min_modelYear" class="year-label">모델 연식</label>
+        <input type="number" name="min_modelYear" id="min_modelYear" value="{{ request.GET.min_modelYear }}" class="filter-input" placeholder="2000">
+        <span class="year-range-symbol">~</span>
+
+        <input type="number" name="max_modelYear" id="max_modelYear" value="{{ request.GET.max_modelYear }}" class="filter-input" placeholder="20xx">
+        <div class="search-group">
+            <input type="text" name="query" placeholder="검색어를 입력하세요" value="{{ request.GET.query }}">
+            <button class="searchbtn">🔍</button>
+        </div>
+    </div>
+</form>
+
+
+{#ionrangeslider#}
+{#<div class="filter_slide">#}
+{##}
+{#    <input type="text" id="price" name="price" value="{{ request.GET.price }}"/>#}
+{#    <input type="text" id="tons_weight" name="tons_weight" value="{{ request.GET.tons_weight }}"/>#}
+{#</div>#}
+
+<script>
+    function navigateToCategory(element) {
+        const boardType = element.getAttribute('data-category');
+        const currentUrl = window.location.href;
+        const newUrl = new URL(currentUrl);
+        newUrl.searchParams.set('boardType', boardType);
+        window.location.href = newUrl.toString();
+    }
+</script>

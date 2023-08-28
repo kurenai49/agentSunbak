@@ -54,6 +54,17 @@ table {
 
 /* reset.css end */
 
+.container {
+    width: 100%; /* 컨테이너의 너비를 100%로 설정 */
+    max-width: 800px; /* 필요한 경우 최대 너비를 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.main-image {
+    width: 90%; /* 상단 이미지의 너비를 컨테이너와 동일하게 설정 */
+    margin-bottom: 2rem;
+}
+
 .categories_link {
     display: flex;
     align-items: flex-start;
@@ -125,7 +136,7 @@ table {
 
 .main_slide {
     width: 100%;
-    max-width: 830px; /* 이 값을 헤더의 max-width 값과 동일하게 설정해주세요. */
+    max-width: 830px; /* 이 값을 헤더의 max-width 값과 동일하게 설정. */
     margin: 20px auto;
 }
 
@@ -348,11 +359,36 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
-    margin-bottom: 2rem;
     max-width: 830px;
     width: 90%;
     margin: 1.5rem auto;
+    gap: 1rem;
+}
+
+.selects {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem; /* 요소들 사이에 간격을 주는 방법 */
+    width: 100%;
+}
+
+.selects select {
+    width: 33.33%;
+    /*flex-grow: 1;*/
+}
+
+.year-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 830px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.search-group {
+    display: flex;
+    gap: 1rem;
 }
 
 .search-form input,
@@ -372,7 +408,6 @@ a:hover {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%; /* set the width to 100% so that it matches in width with other elements on smaller screens */
 }
 
 .search-form button:hover {
@@ -384,6 +419,7 @@ a:hover {
     width: 90%;
     margin: 0 auto;
 }
+
 #price #tons_weight {
     margin: 150px;
 }
@@ -396,8 +432,9 @@ a:hover {
     border-radius: 4px;
     outline: none;
     margin-right: 0; /* 우측 마진 추가 */
-    width: 12%; /* 너비 조정 */
+    max-width: 50px;
 }
+
 
 .searchbtn {
     padding: 0.5rem 1rem;
@@ -409,52 +446,43 @@ a:hover {
     cursor: pointer;
 }
 
-.year-filter {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    max-width: 830px;
-    width: 90%;
-    margin: 1.5rem auto;
-}
+
 .year-label {
     font-size: 16px; /* 라벨의 글자 크기 조정 */
-    margin-right: 10px; /* 오른쪽 여백 추가 */
+    margin-right: 0px; /* 오른쪽 여백 추가 */
+    line-height: 36px;
+    vertical-align: middle;
 }
 
 .year-range-symbol {
     margin: 0 0px; /* 양쪽 여백 추가 */
+    font-size: 16px; /* 라벨의 글자 크기 조정 */
+    line-height: 36px;
+    vertical-align: middle;
 }
 
-.searchbtn {
-    /* 버튼에 대한 추가 스타일링 */
+input::placeholder {
+    text-align: center;
 }
 
-/* Update this media query as follows */
-@media (min-width: 600px) {
-    .search-form {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around; /* change this to flex-start so elements start at the left */
-    }
-
-    .search-form input,
-    .search-form select,
-    .search-form button {
-        flex: 2.5; /* make each form element take up equal amount of space */
-        max-width: none;
-        margin-right: 0; /* add some margin to the right of each element */
-    }
-
-    .search-form button {
-        flex: 1; /* decrease the size ratio of the button element */
-        margin-right: 0; /* remove the right margin from the button */
-    }
+input::-webkit-input-placeholder { /* Chrome, Opera, Safari */
+    text-align: center;
 }
 
-/* Other styles are omitted for brevity... */
+input::-moz-placeholder { /* Firefox 19+ */
+    text-align: center;
+}
+
+input:-ms-input-placeholder { /* IE 10+ */
+    text-align: center;
+}
+
+@media (max-width: 736px) {
+    .categories_link li {
+        flex: 0 0 35%; /* flex-grow: 0, flex-shrink: 0, flex-basis: 50% */
+        margin: 10px;
+    }
+}
 
 
 /* New Pagination styles */
