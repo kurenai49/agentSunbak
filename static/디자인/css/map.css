@@ -49,8 +49,6 @@
 .map_result_wrap .map_type_select > li .box { position: absolute;  left: 50%;  top: 50%;  transform: translate(-50%,-50%); width: 75%;  display: flex; flex-direction: column; align-items: center;  gap: 1rem;}
 .map_result_wrap .map_type_select > li .icon {width: 90%; max-width: 60px;}
 .map_result_wrap .map_type_select > li .txt { font-size: 1.2rem;  margin-bottom: 0;  color: #fff;}
-.map_result_wrap .map_type_select > li.selected { position: relative;  width: 22%;  height: 0;  padding-bottom: 22%;  cursor: pointer;  background: linear-gradient(to top, #FF00FF, #02275f); border-radius: 100px;  box-shadow: 4px 4px 12px rgba(0,0,0,0.25);transition: all .4s ease;}
-
 .map_result_wrap .select_filter { display: flex; align-items: center; gap: 10px;}
 .map_result_wrap .select_filter .select_box { flex: 1;}
 .map_result_wrap .select_filter .select_box .form-select {  font-size: 1.1rem; font-weight: 500; border: none; color: #3B4E72;  padding: 0.75rem 2.25rem 0.75rem 1.5rem; box-shadow: none;  background-color: #F1F1F1; text-overflow: ellipsis;}
@@ -63,7 +61,7 @@
 .map_result_wrap .year_filter .search-group .form-control { font-size: 1.1rem; font-weight: 500; border: none; color: #3B4E72;  padding: 0.75rem 1.5rem; box-shadow: none; background-color: #F1F1F1;}
 .map_result_wrap .year_filter .search-group .form-control::placeholder { color: #c5c5c5;}
 .map_result_wrap .year_filter .search-group .searchbtn { font-size: 1.1rem; padding: 0.75rem 1rem; background-color: #3B4E72;  color: #fff;}
-.map_result_wrap .selected-region { width: 100%;  margin: 2rem 0 2.5rem; text-align: center; font-size: 2rem;  font-weight: 700;  color: #3B4E72;}
+.map_result_wrap .selected-region { width: 100%;  margin: 6rem 0 2.5rem; text-align: center; font-size: 2rem;  font-weight: 700;  color: #3B4E72;}
 .map_result_wrap .fishing_content { display: flex; flex-wrap: wrap; gap: 3.5rem 1.5rem;}
 .map_result_wrap .fishing_content .fishing_item { width: calc((100% - 1.5rem*2)/3); background-color: #fff;  box-shadow: 4px 4px 12px rgba(0,0,0,0.15); border-radius: 15px; overflow: hidden; transition: all 0.4s ease;}
 .map_result_wrap .fishing_content .fishing_item:hover { transform: translateY(-15px);}
@@ -76,7 +74,7 @@
 .map_result_wrap .fishing_content .fishing_item .txt_info .price {  font-size: 1.8rem; font-weight: 800; color: #02275f;  font-family: 'Pretendard', sans-serif;}
 .map_result_wrap .fishing_content .fishing_item .txt_info .sub {  font-size: 0.9rem;  color: #a0a0a0;  margin-bottom: 0;  text-align: right;}
 
-.map_result_wrap .pagination_box {  margin-top: 4rem;}
+.map_result_wrap .pagination_box {  margin-top: 6rem;}
 .map_result_wrap .pagination_box .pagination { justify-content: center;   align-items: center;}
 .map_result_wrap .pagination_box .page-item { width: 36px;  height: 36px;}
 .map_result_wrap .pagination_box .page-item .page-link { width: 100%; height: 100%; font-size: 0.85rem; color: var(--Text_info);  border: 0;  border-radius: 50px; padding: 0; display: flex; align-items: center; justify-content: center;}
@@ -93,7 +91,7 @@
 .map_result_wrap .video_wrap .video_item .thum > img { width: 100%; height: 100%; object-fit: cover; position: absolute; left: 0;  top: 0;}
 .map_result_wrap .video_wrap .video_item .thum::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 60%;  background: linear-gradient(to top, black, transparent); z-index: 10; opacity: 0.4;}
 .map_result_wrap .video_wrap .video_item .txtbox { padding: 0.75rem 0.75rem 1rem}
-.map_result_wrap .video_wrap .video_item .video_tit { color: #000; font-size: 1rem; font-weight: 600; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5;  margin-bottom: 0; line-height: 1.5em; min-height: 3em;}
+.map_result_wrap .video_wrap .video_item .video_tit { color: #000; font-size: 1rem; font-weight: 600; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;  margin-bottom: 0; line-height: 1.5em; min-height: 3em;}
 .map_result_wrap .video_wrap .video_item .video_info {display: flex; align-items: center; gap: 0.25rem; margin-top: 0.5rem; }
 .map_result_wrap .video_wrap .video_item .video_info span {color: #444;font-size: 0.85rem;}
 .map_result_wrap .video_wrap .video_item .video_info span.dot {display: block;  width: 3px;height: 3px; background-color: #444444; border-radius: 50%;}
@@ -209,7 +207,6 @@
 
     .map_result_wrap .map_type_select { gap: 1.5rem; flex-wrap: wrap; }
     .map_result_wrap .map_type_select > li { width: calc((100% - 3rem)/2); padding-bottom: calc((100% - 3rem)/2); }
-    .map_result_wrap .map_type_select > li.selected { width: calc((100% - 3rem)/2); padding-bottom: calc((100% - 3rem)/2); }
     .map_result_wrap .map_type_select > li .box { gap: 0.85rem; }
     .map_result_wrap .select_filter { flex-direction: column; }
     .map_result_wrap .select_filter .select_box { width: 100%; }

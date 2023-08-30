@@ -4,13 +4,21 @@ from django.db.models import Q
 from datetime import datetime
 # Create your views here.
 
-
+ytb_movies = (
+    ('V6w1Vn8-8_U', '[실매물 중고보트 모음집] 다양한 브랜드, 크기, 가격의 중고보트들 스타보트에 다 있다!'),
+    ('4jedtrzfBfo', '중고 알루미늄 보트 그랜저 보다 저렴한 3,000만 원에 구입 가능! l 피싱보트나 낚시배, 요트 렌트하지 마세요 l 수다의 목적'),
+    ('Sr8Lg3WufI0', '3억짜리 배 샀습니다!! 5톤짜리 배입니다!!!'),
+    ('ZR4t3rVyEwo', '[판매완료] 중고요트 침실2개 26피트 낚시보트(레저보트)가 2천만원밖에 안한다고? / 구독자 중고보트리뷰'),
+    ('98zGKR2pBIk', '중고보트를 구입할때 반드시 확인해야할 필수 항목들!!!'),
+    ('GO-euegJ6l0', '배 절대 사지마세요.'),
+)
 class RegionSelectView(TemplateView):
     template_name = 'articleapp/region_select.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['regions'] = sunbak_Crawl_DataModel.objects.values_list('salesLocation', flat=True).distinct().exclude(salesLocation='')
+        context['video_ids'] = ytb_movies
         return context
 
 class ArticleView(ListView):
@@ -103,5 +111,6 @@ class ArticleView(ListView):
 
         # 쿼리 파라미터를 포함한 페이지네이션 링크를 생성하기 위해 현재의 쿼리 파라미터를 context에 추가
         context['query_params'] = self.request.GET.urlencode()
+        context['video_ids'] = ytb_movies
 
         return context

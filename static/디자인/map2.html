@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지역선택 결과</title>
+
+
+    <!-- CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="./css/xeicon.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/map.css">
+
+
+
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link href="https://webfontworld.github.io/goodchoice/Jalnan.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+
+    <div class="wrap">
+
+        <div class="contents map_result_wrap">
+            <div class="map_banner">
+                <img src="./img/map_banner.jpg" alt="" class="img-fluid">
+                <div class="txtbox">
+                    <p class="desc">
+                        중고보트 거래
+                    </p>
+                    <p class="tit Jalnan">
+                        중고보트.com
+                    </p>
+                </div>
+            </div>
+                <div class="map_result_inner inner">
+                    <div class="map_content">
+                    <ul class="map_type_select">
+                        <li>
+                            <div class="box">
+                                <div class="icon">
+                                    <img src="./img/boat_icon1.png" alt="" class="img-fluid">
+                                </div>
+                                <p class="txt">어선</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="box">
+                                <div class="icon">
+                                    <img src="./img/boat_icon2.png" alt="" class="img-fluid">
+                                </div>
+                                <p class="txt">낚시배</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="box">
+                                <div class="icon">
+                                    <img src="./img/boat_icon3.png" alt="" class="img-fluid">
+                                </div>
+                                <p class="txt">레저선</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="box">
+                                <div class="icon">
+                                    <img src="./img/boat_icon4.png" alt="" class="img-fluid">
+                                </div>
+                                <p class="txt">기타선박</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="select_filter">
+                        <div class="select_box">
+                            <select class="form-select" name="order" onchange="submitForm()">
+                                <option value="update_desc">최신순</option>
+                                <option value="update_asc">과거순</option>
+                                <option value="price_desc">높은가격순</option>
+                                <option value="price_asc">낮은가격순</option>
+                            </select>
+                        </div>
+                        <div class="select_box">
+                            <select class="form-select" name="price_range" onchange="submitForm()">
+                                <option value="">가격 전체</option>
+                                <option value="below_100">1억 미만</option>
+                                <option value="100_to_300">1억 이상 ~ 3억 미만</option>
+                                <option value="300_to_1000">3억 이상 ~ 10억 미만</option>
+                                <option value="above_1000">10억 이상</option>
+                            </select>
+                        </div>
+                        <div class="select_box">
+                            <select class="form-select" name="tons_range" onchange="submitForm()">
+                                <option value="">톤수 전체</option>
+                                <option value="below_3t">3톤 미만</option>
+                                <option value="3t_to_5t">3톤 이상 ~ 5톤 미만</option>
+                                <option value="5t_to_8t">5톤 이상 ~ 8톤 미만</option>
+                                <option value="8t_to_10t">8톤 이상 ~ 10톤 미만</option>
+                                <option value="above_10t">10톤 이상</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="year_filter">
+                        <div class="filter_box">
+                            <label for="min_modelYear" class="year-label">
+                                모델 연식
+                            </label>
+                            <input type="tel" name="min_modelYear" id="min_modelYear" class="form-control filter-input"
+                                maxlength="4" pattern="\d*" placeholder="2000">
+                            <span class="year-range-symbol">~</span>
+                            <input type="tel" name="max_modelYear" id="max_modelYear" class="form-control filter-input"
+                                maxlength="4" pattern="\d*" placeholder="2023">
+                        </div>
+                        <div class="search-group">
+                            <input type="text" name="query" placeholder="검색어를 입력하세요" class="form-control">
+                            <button class="btn btn-clear searchbtn">
+                                <i class="xi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="selected-region">
+                        지역 : 서울
+                    </div>
+
+                    <ul class="fishing_content">
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample2.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample3.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample4.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample5.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample6.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample2.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample3.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample4.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample5.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="fishing_item">
+                            <a href="#none" class="card-link">
+                                <div class="imgbox">
+                                    <img src="./img/sample6.jpg" alt="전남/9.77톤/2017연식/연안자망" class="img-fluid">
+                                </div>
+                                <div class="txt_info">
+                                    <p class="tit">전남/9.77톤/2017연식/연안자망</p>
+                                    <p class="date">2023-08-28</p>
+                                    <p class="price">2억6천만</p>
+                                    <p class="sub">대한선박중개</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="pagination_box">
+                        <ul class="pagination">
+                            <li class="page-item start">
+                                <a class="page-link" href="#"></a>
+                            </li>
+                            <li class="page-item prev">
+                                <a class="page-link" href="#"></a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">4</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">5</a>
+                            </li>
+                            <li class="page-item next">
+                                <a class="page-link" href="#"></a>
+                            </li>
+                            <li class="page-item last">
+                                <a class="page-link" href="#"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="video_wrap">
+                    <ul class="video_box">
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/Q414VnDOZNk/mqdefault.jpg" alt=""
+                                    class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    호랑이들의 마지막 지상낙원, 란탐보어 호랑이 보호구역
+                                </p>
+                                <div class="video_info">
+                                    <span>조회수 107만회</span>
+                                    <span class="dot"></span>
+                                    <span>2년 전</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/S2AAFahNo_Y/mqdefault.jpg" alt=""
+                                    class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    천만년 전부터 이어져 온 범고래와 백상아리의 대결 천만년 전부터 이어져 온 범고래와 백상아리의 대결
+                                </p>
+                                <div class="video_info">
+                                    <span>조회수 191만회</span>
+                                    <span class="dot"></span>
+                                    <span>1년 전</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/Q414VnDOZNk/mqdefault.jpg" alt=""
+                                    class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    호랑이들의 마지막 지상낙원, 란탐보어 호랑이 보호구역
+                                </p>
+                                <div class="video_info">
+                                    <span>조회수 107만회</span>
+                                    <span class="dot"></span>
+                                    <span>2년 전</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/S2AAFahNo_Y/mqdefault.jpg" alt=""
+                                    class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    천만년 전부터 이어져 온 범고래와 백상아리의 대결 천만년 전부터 이어져 온 범고래와 백상아리의 대결
+                                </p>
+                                <div class="video_info">
+                                    <span>조회수 191만회</span>
+                                    <span class="dot"></span>
+                                    <span>1년 전</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/Q414VnDOZNk/mqdefault.jpg" alt=""
+                                    class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    호랑이들의 마지막 지상낙원, 란탐보어 호랑이 보호구역
+                                </p>
+                                <div class="video_info">
+                                    <span>조회수 107만회</span>
+                                    <span class="dot"></span>
+                                    <span>2년 전</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/S2AAFahNo_Y/mqdefault.jpg" alt=""
+                                    class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    천만년 전부터 이어져 온 범고래와 백상아리의 대결 천만년 전부터 이어져 온 범고래와 백상아리의 대결
+                                </p>
+                                <div class="video_info">
+                                    <span>조회수 191만회</span>
+                                    <span class="dot"></span>
+                                    <span>1년 전</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="map_footer">
+                <div class="map_footer_inner">
+                    <p class="footer_title Jalnan">
+                        <a href="/">중고보트.com</a>
+                    </p>
+                    <div class="footer_menu">
+                        <a href="https://www.xn--114-9v2ne98an6b.com/" target="_blank">
+                            중장비114.com
+                        </a>
+                        <span class="bar"></span>
+                        <a href="https://cafe.naver.com/trucklife" target="_blank">
+                            중장비선수들 커뮤니티
+                        </a>
+                    </div>
+                    <div class="footer_disclaimer">
+                        중장비선수들 주식회사는 상품판매와 직접적인 관련이 없으며, 모든 상거래의 책임은 구매자와 판매자에게 있습니다.<br>
+                        이에 대해 중장비선수들 주식회사는 일체의 책임을 지지 않습니다.<br>
+                        본사에 등록된 모든 광고와 저작권 및 법적책임은 자료제공사 (또는 글쓴이)에게 있으므로 본사는 광고에 대한 책임을 지지 않습니다.
+                    </div>
+                    <div class="footer_copyright">
+                        Copyright 중장비선수들 주식회사 Co., Ltd. All Rights Reserved.
+                    </div>
+                    <div class="footer_email">
+                        문의 이메일:
+                        <a href="mailto:smile@race600.com" class="mail">smile@race600.com</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <!-- JS -->
+    <script src="./js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+    <script src="./js/jquery-3.4.1.min.js"></script>
+    <script src="./js/common.js"></script>
+
+
+
+
+</body>
+
+</html>

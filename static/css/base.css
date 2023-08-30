@@ -384,12 +384,24 @@ a:hover {
     max-width: 830px;
     width: 100%;
     vertical-align: middle;
+    align-items: center;
 }
 
 .search-group {
     display: flex;
+    align-items: center;
     gap: 1rem;
 }
+
+
+.selected-region {
+    margin-left: 10px;
+    font-size: 0.92rem;
+    color: #333;
+    flex-grow: 1;
+    text-align: right;
+}
+
 
 .search-form input,
 .search-form select {
@@ -460,6 +472,8 @@ a:hover {
     line-height: 36px;
     vertical-align: middle;
 }
+
+
 
 input::placeholder {
     text-align: center;

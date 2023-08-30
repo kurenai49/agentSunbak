@@ -7,11 +7,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>중고보트.com - 지역선택</title>
+    <title>지역선택</title>
 
 
     <!-- CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet"
+    <link href="{% static 'articleapp/css/bootstrap.min.css' %}" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{% static 'articleapp/css/xeicon.css' %}">
@@ -35,10 +35,13 @@
 
     <div class="contents map_wrap">
         <div class="map_inner">
+            <div class="map_bgbox">
+                <img src="{% static 'articleapp/imgs/map_img.png' %}" alt="" class="img-fluid">
+            </div>
             <div class="left_box">
                 <div class="title">
                     <p class="tit">
-                        지역 선택
+                        중고선박 매물조회
                     </p>
                     <p class="desc mb-0">
                         지역을 선택해주세요.
@@ -48,17 +51,39 @@
                     <div class="region_select">
                         {% for region in regions %}
                             <div class="form-check">
-                            <input class="form-check-input" type="radio" name="region_radio" id="region{{ forloop.counter }}">
-                            <label class="form-check-label" for="region{{ forloop.counter }}">
-                                {{ region }}
-                            </label>
-                        </div>
+                                <input class="form-check-input" type="radio" name="region_radio" id="region{{ forloop.counter }}">
+                                <label class="form-check-label" for="region{{ forloop.counter }}">
+                                    {{ region }}
+                                </label>
+                            </div>
                         {% endfor %}
                     </div>
                 </form>
             </div>
             <div class="right_box">
-                <img src="{% static 'articleapp/map_img.png' %}" alt="" class="img-fluid">
+                <ul class="video_box">
+                    {% for video_id, title in video_ids %}
+                        <li class="video_item">
+                            <a href="https://www.youtube.com/watch?v={{ video_id }}">
+                                <div class="thum">
+                                    <img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg" alt=""
+                                         class="img-fluid">
+                                </div>
+                                <div class="txtbox">
+                                    <p class="video_tit">
+                                        {{ title }}
+                                    </p>
+                                    {#                                <div class="video_info">#}
+                                    {#                                    <span>조회수 107만회</span>#}
+                                    {#                                    <span class="dot"></span>#}
+                                    {#                                    <span>2년 전</span>#}
+                                    {#                                </div>#}
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+
+                </ul>
             </div>
         </div>
     </div>
@@ -66,12 +91,9 @@
 
 
 <!-- JS -->
-<script src="./js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-</script>
-<script src="./js/jquery-3.4.1.min.js"></script>
+{#<script src="./js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>#}
+{#<script src="./js/jquery-3.4.1.min.js"></script>#}
 <script src="./js/common.js"></script>
-
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

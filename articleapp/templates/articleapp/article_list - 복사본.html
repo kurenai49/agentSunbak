@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nextPgaeLinkTag %}
+    {% if page_obj.has_next %}
+        <link rel="next" href="?{{ query_params }}&page={{ page_obj.next_page_number }}"/>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% include 'articleapp/article_filters.html' %}
+    <script src="{% static 'articleapp/js/filters.js' %}"></script>
+    <div class="main_slide">
+        <ul>
+            {% for article in articles %}
+                <li>
+                    {% if article.siteName == '한국선박중개소' %}
+                        <a href="{{ article.detailURL }}" class="card-link">
+                    {% elif article.siteName == '도시선박' %}
+                        <a href="{{ article.detailURL }}" class="card-link">
+                    {% elif article.siteName == '대한선박중개' %}
+                        <a href="#" onclick="javascript:daehan_sunbak_openShipDetails('{{ article.boardURL }}','{{ article.detailURL }}')" class="card-link">
+                    {% endif %}
+                    {% if article.thumb_image %}
+                        <img src="{{ article.thumb_image.url }}" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
+                    {% else %}
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
+                    {% endif %}
+                    <div class="txt_info">
+                        <p>{{ article.title }}</p>
+                        <span>{{ article.updated_at|date:"Y-m-d" }}</span>
+                        <h1>{{ article.price }}</h1>
+                        <b>{{ article.siteName }}</b>
+                    </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- pagination 추가 -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?{{ query_params }}&page={{ page_obj.previous_page_number }}">&lt;</a>
+            {% endif %}
+            {% for i in paginator.page_range %}
+                {% if i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
+                    {% if page_obj.number == i %}
+                        <span class="current">
+                            {{ i }}
+                        </span>
+                    {% else %}
+                        <a href="?{{ query_params }}&page={{ i }}">{{ i }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="?{{ query_params }}&page={{ page_obj.next_page_number }}">&gt;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

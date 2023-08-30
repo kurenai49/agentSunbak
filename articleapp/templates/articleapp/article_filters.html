@@ -2,7 +2,7 @@
 <div class="container">
     {#    최상단광고판#}
     <div class="index-wrap" style="text-align: center;">
-        <a href="https://kawasakikorea.com/ULTRA310LX">
+        <a href="/">
             <img src="{% static 'imgs/mainlogo.png' %}" alt="" class="main-image">
         </a>
     </div>
@@ -67,6 +67,7 @@
             <input type="text" name="query" placeholder="검색어를 입력하세요" value="{{ request.GET.query }}">
             <button class="searchbtn">🔍</button>
         </div>
+        <span class="selected-region"><a href="{% url 'home' %}">지역 : {{ request.GET.region }}</a></span>
     </div>
 </form>
 

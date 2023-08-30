@@ -1,64 +1,279 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block nextPgaeLinkTag %}
-    {% if page_obj.has_next %}
-        <link rel="next" href="?{{ query_params }}&page={{ page_obj.next_page_number }}"/>
-    {% endif %}
-{% endblock %}
+<head>
+    {% include 'head.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta name="Title" content="스마트한 중고선박 매물검색, 중고보트.com! : 매물검색 사이트"/>
+    <meta name="Description" content="중고선박 매물검색, 가격비교사이트"/>
+    <meta name="Keywords" content="중고선박, 중고배, 중고보트, 중고배 매물, 중고어선, 중고레저선, 중고낚시배, 기타선박, 레저선박, 근해어선, 연안어선, 낚시배, 레저배, 주낙배"/>
+    <meta name="Subject" content="스마트한 중고선박 매물검색, 중고보트.com! : 매물검색 사이트">
+    <meta name="author" content="https://xn--299ay81a07iqvj.com">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="스마트한 중고선박 매물검색, 중고보트.com! : 매물검색 사이트"/>
+    <meta property="og:url" content="https://xn--299ay81a07iqvj.com"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="중고선박 매물검색, 가격비교사이트"/>
+    <meta property="og:site_name" content="중고선박 매물검색 : 매물검색 사이트"/>
+    <meta property="og:image" content="https://xn--299ay81a07iqvj.com/static/imgs/mainlogo.png"/>
 
-{% block content %}
-    {% include 'articleapp/article_filters.html' %}
-    <script src="{% static 'articleapp/js/filters.js' %}"></script>
-    <div class="main_slide">
-        <ul>
-            {% for article in articles %}
-                <li>
-                    {% if article.siteName == '한국선박중개소' %}
-                        <a href="{{ article.detailURL }}" class="card-link">
-                    {% elif article.siteName == '도시선박' %}
-                        <a href="{{ article.detailURL }}" class="card-link">
-                    {% elif article.siteName == '대한선박중개' %}
-                        <a href="#" onclick="javascript:daehan_sunbak_openShipDetails('{{ article.boardURL }}','{{ article.detailURL }}')" class="card-link">
-                    {% endif %}
-                    {% if article.thumb_image %}
-                        <img src="{{ article.thumb_image.url }}" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
-                    {% else %}
-                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
-                    {% endif %}
-                    <div class="txt_info">
-                        <p>{{ article.title }}</p>
-                        <span>{{ article.updated_at|date:"Y-m-d" }}</span>
-                        <h1>{{ article.price }}</h1>
-                        <b>{{ article.siteName }}</b>
+    <title>지역선택 결과</title>
+
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <div class="contents map_result_wrap">
+        <div class="map_banner">
+            <img src="{% static 'articleapp/imgs/map_banner.jpg' %}" alt="" class="img-fluid">
+            <div class="txtbox">
+                <p class="desc">
+                    중고보트 거래
+                </p>
+                <p class="tit Jalnan">
+                    중고보트.com
+                </p>
+            </div>
+        </div>
+        <div class="map_result_inner inner">
+            <div class="map_content">
+                <ul class="map_type_select">
+                    <li onclick="navigateToCategory(this)" {% if request.GET.boardType == '어선' %} class="selected"{% endif %}>
+                        <div class="box">
+                            <div class="icon">
+                                <img src="{% static 'articleapp/imgs/boat_icon1.png' %}" alt="" class="img-fluid">
+                            </div>
+                            <p class="txt">어선</p>
+                        </div>
+                    </li>
+                    <li onclick="navigateToCategory(this)" {% if request.GET.boardType == '낚시배' %} class="selected"{% endif %}>
+                        <div class="box">
+                            <div class="icon">
+                                <img src="{% static 'articleapp/imgs/boat_icon2.png' %}" alt="" class="img-fluid">
+                            </div>
+                            <p class="txt">낚시배</p>
+                        </div>
+                    </li>
+                    <li onclick="navigateToCategory(this)" {% if request.GET.boardType == '레저선' %} class="selected"{% endif %}>
+                        <div class="box">
+                            <div class="icon">
+                                <img src="{% static 'articleapp/imgs/boat_icon3.png' %}" alt="" class="img-fluid">
+                            </div>
+                            <p class="txt">레저선</p>
+                        </div>
+                    </li>
+                    <li onclick="navigateToCategory(this)" {% if request.GET.boardType == '기타선박' %} class="selected"{% endif %}>
+                        <div class="box">
+                            <div class="icon">
+                                <img src="{% static 'articleapp/imgs/boat_icon4.png' %}" alt="" class="img-fluid">
+                            </div>
+                            <p class="txt">기타선박</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <form id="search-form" method="get" class="search-form">
+                    <div class="select_filter">
+                        <div class="select_box">
+                            <select class="form-select" name="order" onchange="submitForm()">
+                                <option value="update_desc" {% if order == 'update_desc' %}selected{% endif %}>최신순</option>
+                                <option value="update_asc" {% if order == 'update_asc' %}selected{% endif %}>과거순</option>
+                                <option value="price_desc" {% if order == 'price_desc' %}selected{% endif %}>높은가격순</option>
+                                <option value="price_asc" {% if order == 'price_asc' %}selected{% endif %}>낮은가격순</option>
+                            </select>
+                        </div>
+                        <div class="select_box">
+                            <select class="form-select" name="price_range" onchange="submitForm()">
+                                <option value="">가격 전체</option>
+                                <option value="below_100" {% if selected_price == 'below_100' %}selected{% endif %}>1억 미만</option>
+                                <option value="100_to_300" {% if selected_price == '100_to_300' %}selected{% endif %}>1억 이상 ~ 3억 미만</option>
+                                <option value="300_to_1000" {% if selected_price == '300_to_1000' %}selected{% endif %}>3억 이상 ~ 10억 미만</option>
+                                <option value="above_1000" {% if selected_price == 'above_1000' %}selected{% endif %}>10억 이상</option>
+                            </select>
+                        </div>
+                        <div class="select_box">
+                            <select class="form-select" name="tons_range" onchange="submitForm()">
+                                <option value="">톤수 전체</option>
+                                <option value="below_3t" {% if selected_tons == 'below_3t' %}selected{% endif %}>3톤 미만</option>
+                                <option value="3t_to_5t" {% if selected_tons == '3t_to_5t' %}selected{% endif %}>3톤 이상 ~ 5톤 미만</option>
+                                <option value="5t_to_8t" {% if selected_tons == '5t_to_8t' %}selected{% endif %}>5톤 이상 ~ 8톤 미만</option>
+                                <option value="8t_to_10t" {% if selected_tons == '8t_to_10t' %}selected{% endif %}>8톤 이상 ~ 10톤 미만</option>
+                                <option value="above_10t" {% if selected_tons == 'above_10t' %}selected{% endif %}>10톤 이상</option>
+                            </select>
+                        </div>
                     </div>
+
+                    <div class="year_filter">
+                        <div class="filter_box">
+                            <label for="min_modelYear" class="year-label">
+                                모델 연식
+                            </label>
+                            <input type="tel" name="min_modelYear" id="min_modelYear" class="form-control filter-input"
+                                   maxlength="4" pattern="\d*" placeholder="2000" value="{{ request.GET.min_modelYear }}">
+                            <span class="year-range-symbol">~</span>
+                            <input type="tel" name="max_modelYear" id="max_modelYear" class="form-control filter-input"
+                                   maxlength="4" pattern="\d*" placeholder="2023" value="{{ request.GET.max_modelYear }}">
+                        </div>
+                        <div class="search-group">
+                            <input type="text" name="query" placeholder="검색어를 입력하세요" class="form-control" value="{{ request.GET.query }}">
+                            <button class="btn btn-clear searchbtn">
+                                <i class="xi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="selected-region">
+                        {% if request.GET.region %}
+                            <a href="/">지역</a> : {{ request.GET.region }}
+                        {% else %}
+                            <a href="/">지역</a> : 전체
+                        {% endif %}
+
+                    </div>
+                </form>
+
+                <ul class="fishing_content">
+                    {% for article in articles %}
+                        <li class="fishing_item">
+                            {% if article.siteName == '한국선박중개소' %}
+                                <a href="{{ article.detailURL }}" class="card-link">
+                            {% elif article.siteName == '도시선박' %}
+                                <a href="{{ article.detailURL }}" class="card-link">
+                            {% elif article.siteName == '대한선박중개' %}
+                                <a href="#" onclick="javascript:daehan_sunbak_openShipDetails('{{ article.boardURL }}','{{ article.detailURL }}')" class="card-link">
+                            {% endif %}
+                            {% if article.thumb_image %}
+                                <div class="imgbox">
+                                    <img src="{{ article.thumb_image.url }}" alt="{{ article.title }}" class="img-fluid">
+                                </div>
+                            {% else %}
+                                <div class="imgbox">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{{ article.title }}" style="object-fit: cover; height: 200px;">
+                                </div>
+                            {% endif %}
+                            <div class="txt_info">
+                                <p class="tit">{{ article.title }}</p>
+                                <p class="date">{{ article.updated_at|date:"Y-m-d" }}</p>
+                                <p class="price">{{ article.price }}</p>
+                                <p class="sub">{{ article.siteName }}</p>
+                            </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="pagination_box">
+                    <ul class="pagination">
+                        {% if 1 != page_obj.number %}
+                            <li class="page-item start">
+                                <a class="page-link" href="#"></a>
+                            </li>
+                        {% endif %}
+                        {% if page_obj.has_previous %}
+                            <li class="page-item prev">
+                                <a class="page-link" href="?{{ query_params }}&page={{ page_obj.previous_page_number }}"></a>
+                            </li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
+                                {% if page_obj.number == i %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="?{{ query_params }}&page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?{{ query_params }}&page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item next">
+                                <a class="page-link" href="?{{ query_params }}&page={{ page_obj.next_page_number }}"></a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item last">
+                            <a class="page-link" href="?{{ query_params }}&page={{ page_obj.num_pages }}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="video_wrap">
+                <ul class="video_box">
+                    {% for movie_id, title in video_ids %}
+                        <li class="video_item">
+                            <div class="thum">
+                                <img src="https://img.youtube.com/vi/{{ movie_id }}/mqdefault.jpg" alt="{{ title }}" class="img-fluid">
+                            </div>
+                            <div class="txtbox">
+                                <p class="video_tit">
+                                    {{ title }}
+                                </p>
+                                {#                                <div class="video_info">#}
+                                {#                                    <span>조회수 107만회</span>#}
+                                {#                                    <span class="dot"></span>#}
+                                {#                                    <span>2년 전</span>#}
+                                {#                                </div>#}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <footer class="map_footer">
+            <div class="map_footer_inner">
+                <p class="footer_title Jalnan">
+                    <a href="/">중고보트.com</a>
+                </p>
+                <div class="footer_menu">
+                    <a href="https://www.xn--114-9v2ne98an6b.com/" target="_blank">
+                        중장비114.com
                     </a>
-                </li>
-            {% endfor %}
-        </ul>
+                    <span class="bar"></span>
+                    <a href="https://cafe.naver.com/trucklife" target="_blank">
+                        중장비선수들 커뮤니티
+                    </a>
+                </div>
+                <div class="footer_disclaimer">
+                    중장비선수들 주식회사는 상품판매와 직접적인 관련이 없으며, 모든 상거래의 책임은 구매자와 판매자에게 있습니다.<br>
+                    이에 대해 중장비선수들 주식회사는 일체의 책임을 지지 않습니다.<br>
+                    본사에 등록된 모든 광고와 저작권 및 법적책임은 자료제공사 (또는 글쓴이)에게 있으므로 본사는 광고에 대한 책임을 지지 않습니다.
+                </div>
+                <div class="footer_copyright">
+                    Copyright 중장비선수들 주식회사 Co., Ltd. All Rights Reserved.
+                </div>
+                <div class="footer_email">
+                    문의 이메일:
+                    <a href="mailto:smile@race600.com" class="mail">smile@race600.com</a>
+                </div>
+            </div>
+        </footer>
     </div>
-    <!-- pagination 추가 -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?{{ query_params }}&page={{ page_obj.previous_page_number }}">&lt;</a>
-            {% endif %}
+</div>
 
-            {% for i in paginator.page_range %}
-                {% if i >= page_obj.number|add:"-2" and i <= page_obj.number|add:"2" %}
-                    {% if page_obj.number == i %}
-                        <span class="current">
-                            {{ i }}
-                        </span>
-                    {% else %}
-                        <a href="?{{ query_params }}&page={{ i }}">{{ i }}</a>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+<!-- JS -->
+<script src="{% static 'articleapp/js/bootstrap.bundle.min.js' %}" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="{% static 'articleapp/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'articleapp/js/common.js' %}"></script>
+<script src="{% static 'articleapp/js/filters.js' %}"></script>
+<script>
+    function navigateToCategory(element) {
+    const boardType = element.innerText;
+    const currentUrl = window.location.href;
+    const newUrl = new URL(currentUrl);
+    newUrl.searchParams.set('boardType', boardType);
+    window.location.href = newUrl.toString();
+}
+</script>
 
-            {% if page_obj.has_next %}
-                <a href="?{{ query_params }}&page={{ page_obj.next_page_number }}">&gt;</a>
-            {% endif %}
-        </span>
-    </div>
-{% endblock %}
+</body>
+</html>

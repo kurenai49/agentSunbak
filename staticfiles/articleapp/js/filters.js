@@ -1,3 +1,4 @@
+
 function submitForm() {
     document.getElementById('search-form').submit();
 }

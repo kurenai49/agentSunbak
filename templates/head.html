@@ -4,26 +4,46 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <!--  DEFAULT CSS LINK  -->
-<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+{#<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">#}
 
 {#네이버 사이트소유확인#}
-<meta name="naver-site-verification" content="14f0bc9833811d2794b2faf2891581b4c530bd7d" />
+<meta name="naver-site-verification" content="14f0bc9833811d2794b2faf2891581b4c530bd7d"/>
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- ionRange slider -->
+<!-- CSS -->
+<link href="{% static 'articleapp/css/bootstrap.min.css' %}" rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+<link rel="stylesheet" href="{% static 'articleapp/css/xeicon.css' %}">
+<link rel="stylesheet" href="{% static 'articleapp/css/common.css' %}">
+<link rel="stylesheet" href="{% static 'articleapp/css/map.css' %}">
+
+
+<!-- Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://webfontworld.github.io/goodchoice/Jalnan.css" rel="stylesheet">
+
+
+{#<!-- ionRange slider -->#}
 {#<link rel="stylesheet" href="{% static 'articleapp/css/ion.rangeSlider.min.css' %}"/>#}
 {#<script src="{% static 'articleapp/js/ion.rangeSlider.min.js' %}"></script>#}
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4F125YWWBK"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
 
-  gtag('config', 'G-4F125YWWBK');
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-4F125YWWBK');
 </script>
 
 {% block nextPgaeLinkTag %}{% endblock %}
@@ -42,12 +62,15 @@
 </script>
 
 <script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:3602129,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+    (function (h, o, t, j, a, r) {
+        h.hj = h.hj || function () {
+            (h.hj.q = h.hj.q || []).push(arguments)
+        };
+        h._hjSettings = {hjid: 3602129, hjsv: 6};
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script');
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
         a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
 </script>
