@@ -267,13 +267,17 @@
 <script src="{% static 'articleapp/js/filters.js' %}"></script>
 <script>
     function navigateToCategory(element) {
-    const boardType = element.innerText;
-    const currentUrl = window.location.href;
-    const newUrl = new URL(currentUrl);
-    newUrl.searchParams.set('boardType', boardType);
-    window.location.href = newUrl.toString();
-}
+        let boardType = element.innerText;
+        if (boardType === '레저선') {
+            boardType = '레저선박';
+        }
+        const currentUrl = window.location.href;
+        const newUrl = new URL(currentUrl);
+        newUrl.searchParams.set('boardType', boardType);
+        window.location.href = newUrl.toString();
+    }
 </script>
+
 
 </body>
 </html>

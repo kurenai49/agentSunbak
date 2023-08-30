@@ -38,17 +38,20 @@ docker cp /home/uploads/region_select.html agentsunbak_django:/home/agentSunbak/
 0. push
 
 깃 업로드 완료되면 아래단계
-
+0. db.sqlite3 백업 - docker cp agentsunbak_django:/home/agentSunbak/db.sqlite3 /home/
 1. putty 접속
 2. cd /home/
 3. docker container list
 4. agentsunbak_django 의 현재 태그 숫자 확인하기
 5. 이미지 새로 생성 : 뒤에 태그 숫자 +1 올려주는것 잊지 않기
-docker build --no-cache -t agentsunbak_django:17 -f Dockerfile .
+docker build --no-cache -t agentsunbak_django:18 -f Dockerfile .
 6. portainer 접속 - http://141.164.34.35:9000/
 7. 좌측 Containers 클릭
 8. agentsunbak_django 클릭
 9. Duplicate/Edit 클릭
 10. image* 란에 docker.io 옆에 이미지명 복붙 ex) "agentsunbak_django:17"
-11. 그대로 Deploy the container 클릭
-12. 완료
+11. 그대로 Deploy the container 클릭 - Replace
+12. docker exec -it agentsunbak_django /bin/bash
+13. python manage.py collectstatic
+14. exit
+15. db.sqlite3 복원 - docker cp /home/db.sqlite3 agentsunbak_django:/home/agentSunbak/
