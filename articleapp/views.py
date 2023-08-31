@@ -1,7 +1,7 @@
 from django.views.generic import ListView, TemplateView
 from sunbak_crawler.models import sunbak_Crawl_DataModel
 from django.db.models import Q
-from datetime import datetime
+from django.db.models.functions import Length
 # Create your views here.
 
 ytb_movies = (
@@ -17,7 +17,9 @@ class RegionSelectView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['regions'] = sunbak_Crawl_DataModel.objects.values_list('salesLocation', flat=True).distinct().exclude(salesLocation='')
+        # context['regions'] = sunbak_Crawl_DataModel.objects.values_list('salesLocation', flat=True).distinct().exclude(salesLocation='')
+        context['regions'] = sunbak_Crawl_DataModel.objects.annotate(name_length=Length('salesLocation')).filter(name_length__lte=2).values_list('salesLocation', flat=True).distinct().exclude(salesLocation='')
+
         context['video_ids'] = ytb_movies
         return context
 

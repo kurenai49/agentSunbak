@@ -21,7 +21,7 @@ docker cp /home/uploads/base.css agentsunbak_django:/home/agentSunbak/staticfile
 docker cp /home/uploads/base.css agentsunbak_django:/home/agentSunbak/static/css/base.css
 docker cp /home/uploads/article_list.html agentsunbak_django:/home/agentSunbak/articleapp/templates/articleapp/article_list.html
 docker cp /home/uploads/views.py agentsunbak_django:/home/agentSunbak/articleapp/views.py
-docker cp /home/uploads/article_filters.html agentsunbak_django:/home/agentSunbak/articleapp/templates/articleapp/article_filters.html
+docker cp /home/uploads/map.css agentsunbak_django:/home/agentSunbak/articleapp/static/articleapp/css/map.css
 
 docker cp agentsunbak_django:/home/agentSunbak/db.sqlite3 /home/
 

@@ -42,14 +42,15 @@
 
 .map_result_wrap .map_result_inner { display: flex;  align-items: flex-start; gap: 2rem;}
 
-.map_result_wrap .map_content { flex: 1;}
+.map_result_wrap .map_content { flex: 1; max-width: 67.2%;}
 .map_result_wrap .map_type_select {display: flex; align-items: center; justify-content: center; gap: 4%; margin: 4rem 0;}
 .map_result_wrap .map_type_select > li { position: relative;  width: 22%;  height: 0;  padding-bottom: 22%;  cursor: pointer;  background: linear-gradient(to top, #3b4e72, #02275f); border-radius: 100px;  box-shadow: 4px 4px 12px rgba(0,0,0,0.25);transition: all .4s ease;}
 .map_result_wrap .map_type_select > li:hover { transform: translateY(-15px);}
 .map_result_wrap .map_type_select > li .box { position: absolute;  left: 50%;  top: 50%;  transform: translate(-50%,-50%); width: 75%;  display: flex; flex-direction: column; align-items: center;  gap: 1rem;}
 .map_result_wrap .map_type_select > li .icon {width: 90%; max-width: 60px;}
 .map_result_wrap .map_type_select > li .txt { font-size: 1.2rem;  margin-bottom: 0;  color: #fff;}
-.map_result_wrap .map_type_select > li.selected { position: relative;  width: 22%;  height: 0;  padding-bottom: 22%;  cursor: pointer;  background: linear-gradient(to top, #FF00FF, #02275f); border-radius: 100px;  box-shadow: 4px 4px 12px rgba(0,0,0,0.25);transition: all .4s ease;}
+.map_result_wrap .map_type_select > li.selected {background: linear-gradient(to top, #FF00FF, #02275f);}
+
 
 .map_result_wrap .select_filter { display: flex; align-items: center; gap: 10px;}
 .map_result_wrap .select_filter .select_box { flex: 1;}
@@ -167,6 +168,7 @@
     .map_result_wrap .video_wrap { width: 100%; margin-top: 4rem; }
     .map_result_wrap .video_wrap .video_box { gap: 1.5rem; }
     .map_result_wrap .video_wrap .video_item { width: calc((100% - 1.5rem*2)/3); }
+    .map_result_wrap .map_content {max-width: 100%;}
     .map_footer {  margin-top: 7rem; }
     .map_footer .footer_disclaimer { width: 85%; margin: 0 auto 2rem; word-break: keep-all; }
     .map_footer .footer_disclaimer br { display: none; }
